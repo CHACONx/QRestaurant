@@ -8,9 +8,182 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Formas de pago</title>
+    <title>Menú - Restaurante QR</title>
 
     <link rel="stylesheet" href="estilo.css">
+
+    <style>
+
+        /* ================================
+           VENTANA DE OPCIONES
+        ================================= */
+
+        .modal-opciones {
+            position: fixed;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.65);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 99999;
+        }
+
+        .modal-opciones.mostrar {
+            display: flex;
+        }
+
+        .contenido-modal {
+            position: relative;
+
+            width: min(500px, 100%);
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 35px 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,.30);
+        }
+
+        .cerrar-modal {
+            position: absolute;
+
+            top: 12px;
+            right: 15px;
+
+            width: 38px;
+            height: 38px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #eeeeee;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+        .icono-modal {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .contenido-modal h2 {
+            margin-bottom: 8px;
+            font-size: 26px;
+        }
+
+        .contenido-modal p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .lista-opciones-modal {
+            display: grid;
+
+            grid-template-columns: 1fr;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .opcion-modal {
+            width: 100%;
+
+            padding: 15px;
+
+            border: 2px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            background: #f9fafb;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .opcion-modal:hover {
+            background: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .opcion-modal.seleccionada {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .boton-modal {
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        .producto-emoji {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            height: 190px;
+
+            background: #f3f4f6;
+
+            font-size: 75px;
+        }
+
+        .acciones-menu {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 35px;
+        }
+
+        .acciones-menu button {
+            width: auto !important;
+            min-width: 200px;
+        }
+
+        @media (max-width: 600px) {
+
+            .producto-emoji {
+                height: 160px;
+                font-size: 65px;
+            }
+
+            .acciones-menu {
+                flex-direction: column;
+            }
+
+            .acciones-menu button {
+                width: 100% !important;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -18,189 +191,907 @@
 <body>
 
 
+<!-- ======================================
+     ENCABEZADO
+====================================== -->
+
 <header class="encabezado">
 
-    <div class="logo">
-        💳
+    <div class="icono-restaurante">
+        🍽️
     </div>
 
-    <div>
+    <h1>NUESTRO MENÚ</h1>
 
-        <h1>FORMAS DE PAGO</h1>
-
-        <p id="mesa">
-            Mesa: 1
-        </p>
-
-    </div>
+    <p>
+        Mesa: <span id="mesa">1</span>
+    </p>
 
 </header>
 
 
 
+<!-- ======================================
+     MENÚ
+====================================== -->
+
 <main class="contenedor">
 
 
-    <h2>
-        ¿Cómo deseas pagar?
+    <h2 class="subtitulo">
+        Selecciona una categoría
     </h2>
 
-    <p class="subtitulo">
-        Selecciona una forma de pago
-    </p>
 
+    <!-- CATEGORÍAS -->
 
-
-    <div class="opciones-pago">
-
+    <div class="categorias">
 
         <button
-            class="pago"
-            onclick="seleccionarPago('Efectivo')">
+            type="button"
+            class="categoria"
+            onclick="filtrarMenu('todos')">
 
-            <span class="icono-pago">
-                💵
-            </span>
-
-            <span class="titulo-pago">
-                Efectivo
-            </span>
-
-            <span class="descripcion-pago">
-                Pago en efectivo
-            </span>
+            Todos
 
         </button>
 
 
-
         <button
-            class="pago"
-            onclick="seleccionarPago('Tarjeta')">
+            type="button"
+            class="categoria"
+            onclick="filtrarMenu('comida')">
 
-            <span class="icono-pago">
-                💳
-            </span>
-
-            <span class="titulo-pago">
-                Tarjeta
-            </span>
-
-            <span class="descripcion-pago">
-                Crédito o débito
-            </span>
+            Comidas
 
         </button>
 
 
-
         <button
-            class="pago"
-            onclick="seleccionarPago('Transferencia bancaria')">
+            type="button"
+            class="categoria"
+            onclick="filtrarMenu('bebida')">
 
-            <span class="icono-pago">
-                🏦
-            </span>
-
-            <span class="titulo-pago">
-                Transferencia
-            </span>
-
-            <span class="descripcion-pago">
-                Escanea un código QR
-            </span>
+            Bebidas
 
         </button>
 
 
+        <button
+            type="button"
+            class="categoria"
+            onclick="filtrarMenu('postre')">
+
+            Postres
+
+        </button>
 
     </div>
 
 
 
-    <div
-        id="informacionPago"
-        class="informacion-pago"
-        style="display:none;">
+    <!-- ==================================
+         PRODUCTOS
+    =================================== -->
 
-        <h2>
-            Método seleccionado
-        </h2>
+    <div class="menu-productos">
 
-        <p id="metodoSeleccionado">
-            --
-        </p>
 
+        <!-- HAMBURGUESA -->
 
         <div
-            id="detallePago"
-            class="detalle-pago">
+            class="producto-menu"
+            data-categoria="comida">
+
+            <div class="producto-emoji">
+                🍔
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Hamburguesa</h3>
+
+                <p>
+                    Hamburguesa de la casa.
+                </p>
+
+                <div class="precio">
+                    $5.50
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Hamburguesa',
+                        5.50,
+                        [
+                            'Clásica',
+                            'Con queso',
+                            'Doble carne'
+                        ],
+                        'hamburguesa'
+                    )">
+
+                    Elegir
+
+                </button>
+
+            </div>
+
         </div>
 
 
-        <button
-            class="boton-confirmar"
-            onclick="confirmarPago()">
 
-            ✅ Confirmar
+        <!-- PIZZA -->
+
+        <div
+            class="producto-menu"
+            data-categoria="comida">
+
+            <div class="producto-emoji">
+                🍕
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Pizza</h3>
+
+                <p>
+                    Selecciona el sabor.
+                </p>
+
+                <div class="precio">
+                    Desde $8.00
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Pizza',
+                        8.00,
+                        [
+                            'Pepperoni',
+                            'Jamón',
+                            'Hawaiana',
+                            '4 quesos',
+                            'Carnes'
+                        ],
+                        'pizza'
+                    )">
+
+                    Elegir sabor
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TACOS -->
+
+        <div
+            class="producto-menu"
+            data-categoria="comida">
+
+            <div class="producto-emoji">
+                🌮
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Tacos</h3>
+
+                <p>
+                    Selecciona el sabor.
+                </p>
+
+                <div class="precio">
+                    $4.50
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Tacos',
+                        4.50,
+                        [
+                            'Pastor',
+                            'Pollo',
+                            'Carne asada',
+                            'Chorizo',
+                            'Mixtos'
+                        ],
+                        'tacos'
+                    )">
+
+                    Elegir sabor
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- POLLO -->
+
+        <div
+            class="producto-menu"
+            data-categoria="comida">
+
+            <div class="producto-emoji">
+                🍗
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Pollo con papas</h3>
+
+                <p>
+                    Selecciona la preparación.
+                </p>
+
+                <div class="precio">
+                    $6.50
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Pollo con papas',
+                        6.50,
+                        [
+                            'Pollo frito',
+                            'Pollo a la plancha',
+                            'Pollo BBQ'
+                        ],
+                        'pollo'
+                    )">
+
+                    Elegir
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SODA -->
+
+        <div
+            class="producto-menu"
+            data-categoria="bebida">
+
+            <div class="producto-emoji">
+                🥤
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Soda</h3>
+
+                <p>
+                    Selecciona el sabor.
+                </p>
+
+                <div class="precio">
+                    $1.50
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Soda',
+                        1.50,
+                        [
+                            'Coca-Cola',
+                            'Pepsi',
+                            'Sprite',
+                            'Fanta',
+                            'Uva'
+                        ],
+                        'soda'
+                    )">
+
+                    Elegir sabor
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CAFÉ -->
+
+        <div
+            class="producto-menu"
+            data-categoria="bebida">
+
+            <div class="producto-emoji">
+                ☕
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Café</h3>
+
+                <p>
+                    Selecciona el tipo.
+                </p>
+
+                <div class="precio">
+                    $2.00
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Café',
+                        2.00,
+                        [
+                            'Café negro',
+                            'Café con leche',
+                            'Capuchino',
+                            'Latte'
+                        ],
+                        'cafe'
+                    )">
+
+                    Elegir tipo
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PASTEL -->
+
+        <div
+            class="producto-menu"
+            data-categoria="postre">
+
+            <div class="producto-emoji">
+                🍰
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Pastel</h3>
+
+                <p>
+                    Selecciona el sabor.
+                </p>
+
+                <div class="precio">
+                    $3.00
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Pastel',
+                        3.00,
+                        [
+                            'Chocolate',
+                            'Vainilla',
+                            'Fresa',
+                            'Tres leches'
+                        ],
+                        'pastel'
+                    )">
+
+                    Elegir sabor
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HELADO -->
+
+        <div
+            class="producto-menu"
+            data-categoria="postre">
+
+            <div class="producto-emoji">
+                🍦
+            </div>
+
+            <div class="producto-info">
+
+                <h3>Helado</h3>
+
+                <p>
+                    Selecciona el sabor.
+                </p>
+
+                <div class="precio">
+                    $2.50
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-agregar"
+                    onclick="abrirOpciones(
+                        'Helado',
+                        2.50,
+                        [
+                            'Chocolate',
+                            'Vainilla',
+                            'Fresa',
+                            'Cookies'
+                        ],
+                        'helado'
+                    )">
+
+                    Elegir sabor
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==================================
+         BOTONES
+    =================================== -->
+
+    <div class="acciones-menu">
+
+        <button
+            type="button"
+            class="boton"
+            onclick="irAPedido()">
+
+            🛒 Ver mi pedido
+
+        </button>
+
+
+        <button
+            type="button"
+            class="boton boton-secundario"
+            onclick="irAInicio()">
+
+            ← Volver al inicio
 
         </button>
 
     </div>
-
-
-
-    <div
-        id="mensajePago"
-        class="mensaje-pago"
-        style="display:none;">
-
-        <div class="icono-exito">
-            ✅
-        </div>
-
-        <h2>
-            Método registrado
-        </h2>
-
-        <p>
-            El restaurante ha recibido
-            tu selección.
-        </p>
-
-    </div>
-
-
-    <br><br>
-
-
-    <button
-        class="boton"
-        onclick="irA('index.html')">
-
-        ← Regresar
-
-    </button>
 
 
 </main>
 
 
 
-<footer>
+<!-- ======================================
+     MODAL
+====================================== -->
 
-    <p>
-        Restaurante QR
-    </p>
-
-</footer>
+<div
+    id="modalOpciones"
+    class="modal-opciones">
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div class="contenido-modal">
 
-<script src="supabase.js"></script>
 
-<script src="app.js"></script>
+        <button
+            type="button"
+            class="cerrar-modal"
+            onclick="cerrarModal()">
+
+            ×
+
+        </button>
+
+
+        <div
+            id="iconoModal"
+            class="icono-modal">
+
+            🍽️
+
+        </div>
+
+
+        <h2 id="tituloModal">
+            Selecciona una opción
+        </h2>
+
+
+        <p>
+            Elige una opción para continuar.
+        </p>
+
+
+        <div
+            id="opcionesModal"
+            class="lista-opciones-modal">
+        </div>
+
+
+        <button
+            type="button"
+            class="boton boton-modal"
+            onclick="agregarSeleccion()">
+
+            Agregar al pedido
+
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================
+     JAVASCRIPT DEL MENÚ
+====================================== -->
+
+<script>
+
+    let productoActual = null;
+
+    let opcionActual = null;
+
+
+    /* ================================
+       MESA
+    ================================= */
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const mesaURL =
+        parametros.get("mesa");
+
+
+    let mesa =
+        mesaURL ||
+        localStorage.getItem("mesa") ||
+        "1";
+
+
+    localStorage.setItem(
+        "mesa",
+        mesa
+    );
+
+
+    document.getElementById("mesa")
+        .textContent = mesa;
+
+
+
+    /* ================================
+       ABRIR OPCIONES
+    ================================= */
+
+    function abrirOpciones(
+        nombre,
+        precio,
+        opciones,
+        id
+    ) {
+
+        productoActual = {
+            nombre: nombre,
+            precio: precio,
+            opciones: opciones,
+            id: id
+        };
+
+
+        opcionActual = null;
+
+
+        document.getElementById(
+            "tituloModal"
+        ).textContent = nombre;
+
+
+        const lista =
+            document.getElementById(
+                "opcionesModal"
+            );
+
+
+        lista.innerHTML = "";
+
+
+        opciones.forEach(
+            function(opcion) {
+
+                const boton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                boton.type = "button";
+
+                boton.className =
+                    "opcion-modal";
+
+
+                boton.textContent =
+                    opcion;
+
+
+                boton.addEventListener(
+                    "click",
+                    function() {
+
+                        seleccionarOpcion(
+                            opcion,
+                            boton
+                        );
+
+                    }
+                );
+
+
+                lista.appendChild(boton);
+
+            }
+        );
+
+
+        document.getElementById(
+            "modalOpciones"
+        ).classList.add("mostrar");
+
+    }
+
+
+
+    /* ================================
+       SELECCIONAR OPCIÓN
+    ================================= */
+
+    function seleccionarOpcion(
+        opcion,
+        boton
+    ) {
+
+        opcionActual = opcion;
+
+
+        const botones =
+            document.querySelectorAll(
+                ".opcion-modal"
+            );
+
+
+        botones.forEach(
+            function(item) {
+
+                item.classList.remove(
+                    "seleccionada"
+                );
+
+            }
+        );
+
+
+        boton.classList.add(
+            "seleccionada"
+        );
+
+    }
+
+
+
+    /* ================================
+       AGREGAR AL PEDIDO
+    ================================= */
+
+    function agregarSeleccion() {
+
+        if (!productoActual) {
+
+            return;
+
+        }
+
+
+        if (!opcionActual) {
+
+            alert(
+                "Selecciona una opción primero."
+            );
+
+            return;
+
+        }
+
+
+        let pedido =
+            JSON.parse(
+                localStorage.getItem("pedido")
+            ) || [];
+
+
+        const nombre =
+            productoActual.nombre +
+            " - " +
+            opcionActual;
+
+
+        const id =
+            productoActual.id +
+            "_" +
+            opcionActual;
+
+
+        const existente =
+            pedido.find(
+                function(producto) {
+
+                    return producto.id === id;
+
+                }
+            );
+
+
+        if (existente) {
+
+            existente.cantidad++;
+
+        } else {
+
+            pedido.push({
+
+                id: id,
+
+                nombre: nombre,
+
+                precio:
+                    productoActual.precio,
+
+                cantidad: 1
+
+            });
+
+        }
+
+
+        localStorage.setItem(
+            "pedido",
+            JSON.stringify(pedido)
+        );
+
+
+        cerrarModal();
+
+
+        alert(
+            nombre +
+            " fue agregado al pedido."
+        );
+
+    }
+
+
+
+    /* ================================
+       CERRAR MODAL
+    ================================= */
+
+    function cerrarModal() {
+
+        document.getElementById(
+            "modalOpciones"
+        ).classList.remove("mostrar");
+
+
+        productoActual = null;
+
+        opcionActual = null;
+
+    }
+
+
+
+    /* ================================
+       FILTRAR MENÚ
+    ================================= */
+
+    function filtrarMenu(categoria) {
+
+        const productos =
+            document.querySelectorAll(
+                ".producto-menu"
+            );
+
+
+        productos.forEach(
+            function(producto) {
+
+                const categoriaProducto =
+                    producto.dataset.categoria;
+
+
+                if (
+                    categoria === "todos" ||
+                    categoriaProducto === categoria
+                ) {
+
+                    producto.style.display =
+                        "block";
+
+                } else {
+
+                    producto.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* ================================
+       IR AL PEDIDO
+    ================================= */
+
+    function irAPedido() {
+
+        window.location.href =
+            "pedido.html?mesa=" +
+            encodeURIComponent(mesa);
+
+    }
+
+
+
+    /* ================================
+       VOLVER AL INICIO
+    ================================= */
+
+    function irAInicio() {
+
+        window.location.href =
+            "index.html?mesa=" +
+            encodeURIComponent(mesa);
+
+    }
+
+</script>
+
 
 </body>
 
