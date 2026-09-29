@@ -1,174 +1,325 @@
-/* =========================================================
-   RESTAURANTE QR - APP.JS
-   ========================================================= */
+// =========================================================
+// QRESTAURANT - APP.JS
+// =========================================================
 
 
-/* =========================================================
-   1. IDENTIFICAR LA MESA
-   ========================================================= */
+// =========================================================
+// OBTENER MESA
+// =========================================================
 
-const parametros = new URLSearchParams(window.location.search);
+function obtenerMesa() {
 
-let mesaURL = parametros.get("mesa");
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
 
-let mesaGuardada = localStorage.getItem("mesa");
+    const mesaURL =
+        parametros.get("mesa");
 
 
-// Si anteriormente se guardó "Mesa: 1",
-// eliminamos la parte "Mesa:".
-if (mesaGuardada) {
+    if (mesaURL) {
 
-    mesaGuardada = mesaGuardada
-        .replace("Mesa:", "")
-        .replace("mesa:", "")
-        .trim();
+        sessionStorage.setItem(
+            "clienteMesa",
+            mesaURL
+        );
+
+        return mesaURL;
+    }
+
+
+    return (
+        sessionStorage.getItem(
+            "clienteMesa"
+        ) || "1"
+    );
+}
+
+
+
+// =========================================================
+// OBTENER CLIENTE
+// =========================================================
+
+function obtenerCliente() {
+
+    return {
+
+        nombre:
+            sessionStorage.getItem(
+                "clienteNombre"
+            ) || "",
+
+        apellido:
+            sessionStorage.getItem(
+                "clienteApellido"
+            ) || "",
+
+        mesa:
+            obtenerMesa()
+
+    };
 
 }
 
 
-// Obtener la mesa
-let mesa = mesaURL || mesaGuardada || "1";
 
-
-// Guardar solamente el número
-localStorage.setItem("mesa", mesa);
-
-
-/* =========================================================
-   2. MOSTRAR LA MESA EN TODAS LAS PÁGINAS
-   ========================================================= */
-
-document.querySelectorAll("#mesa").forEach(function(elemento) {
-
-    elemento.textContent = mesa;
-
-});
-
-
-/* =========================================================
-   3. IR A OTRA PÁGINA MANTENIENDO LA MESA
-   ========================================================= */
+// =========================================================
+// IR A OTRA PÁGINA
+// =========================================================
 
 function irA(pagina) {
 
+    const mesa =
+        obtenerMesa();
+
+
     window.location.href =
-        pagina + "?mesa=" + encodeURIComponent(mesa);
+        pagina +
+        "?mesa=" +
+        encodeURIComponent(mesa);
 
 }
 
 
-/* =========================================================
-   4. LLAMAR AL MESERO
-   ========================================================= */
 
-function llamarMesero() {
+// =========================================================
+// LLAMAR MESERO
+// =========================================================
 
-    let solicitudes =
-        JSON.parse(
-            localStorage.getItem("asistencias")
-        ) || [];
+async function llamarMesero() {
+
+    const cliente =
+        obtenerCliente();
 
 
-    let nuevaSolicitud = {
+    const solicitud = {
 
-        mesa: mesa,
+        mesa: cliente.mesa,
 
-        tipo: "Llamar al mesero",
+        tipo: "Llamar mesero",
 
-        fecha: new Date().toLocaleString(),
-
-        estado: "Pendiente"
+        mensaje:
+            cliente.nombre +
+            " " +
+            cliente.apellido
 
     };
 
 
-    solicitudes.push(nuevaSolicitud);
+    // Guardar localmente
 
-
-    localStorage.setItem(
-        "asistencias",
-        JSON.stringify(solicitudes)
-    );
-
-
-    alert(
-        "🔔 El mesero ha sido llamado.\n\nMesa: " +
-        mesa
-    );
-
-}
-
-
-/* =========================================================
-   5. SOLICITAR ASISTENCIA
-   ========================================================= */
-
-function solicitarAyuda(tipo) {
-
-    let solicitudes =
+    const asistencias =
         JSON.parse(
-            localStorage.getItem("asistencias")
+            localStorage.getItem(
+                "asistencias"
+            )
         ) || [];
 
 
-    let nuevaSolicitud = {
+    asistencias.push({
 
-        mesa: mesa,
+        ...solicitud,
 
-        tipo: tipo,
+        fecha:
+            new Date().toISOString(),
 
-        fecha: new Date().toLocaleString(),
+        estado:
+            "Pendiente"
 
-        estado: "Pendiente"
-
-    };
-
-
-    solicitudes.push(nuevaSolicitud);
+    });
 
 
     localStorage.setItem(
         "asistencias",
-        JSON.stringify(solicitudes)
+        JSON.stringify(
+            asistencias
+        )
     );
 
 
+    // Enviar a Supabase
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("asistencias")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    tipo:
+                        "Llamar mesero",
+
+                    mensaje:
+                        cliente.nombre +
+                        " " +
+                        cliente.apellido,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                "Error Supabase:",
+                error
+            );
+
+        }
+
+    }
+
+
     alert(
-        "🆘 Solicitud enviada.\n\n" +
-        tipo +
-        "\nMesa: " +
-        mesa
+        "🔔 El mesero ha sido llamado."
     );
 
 }
 
 
-/* =========================================================
-   6. MOSTRAR CAMPO PARA OTRA SOLICITUD
-   ========================================================= */
+
+// =========================================================
+// SOLICITAR AYUDA
+// =========================================================
+
+async function solicitarAyuda(tipo) {
+
+    const cliente =
+        obtenerCliente();
+
+
+    const mensaje =
+        cliente.nombre +
+        " " +
+        cliente.apellido;
+
+
+    // Guardar localmente
+
+    const asistencias =
+        JSON.parse(
+            localStorage.getItem(
+                "asistencias"
+            )
+        ) || [];
+
+
+    asistencias.push({
+
+        mesa:
+            cliente.mesa,
+
+        tipo:
+            tipo,
+
+        mensaje:
+            mensaje,
+
+        fecha:
+            new Date().toISOString(),
+
+        estado:
+            "Pendiente"
+
+    });
+
+
+    localStorage.setItem(
+        "asistencias",
+        JSON.stringify(
+            asistencias
+        )
+    );
+
+
+    // Supabase
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("asistencias")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    tipo:
+                        tipo,
+
+                    mensaje:
+                        mensaje,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    alert(
+        "🆘 Solicitud enviada."
+    );
+
+}
+
+
+
+// =========================================================
+// MOSTRAR CAMPO "OTRA SOLICITUD"
+// =========================================================
 
 function mostrarOtraAsistencia() {
 
-    const elemento =
+    const campo =
         document.getElementById(
-            "otraSolicitud"
+            "mensajeAsistencia"
         );
 
 
-    if (elemento) {
+    if (campo) {
 
-        elemento.style.display = "block";
+        campo.style.display =
+            "block";
+
+        campo.focus();
 
     }
 
 }
 
 
-/* =========================================================
-   7. ENVIAR OTRA SOLICITUD
-   ========================================================= */
 
-function enviarOtraSolicitud() {
+// =========================================================
+// ENVIAR OTRA SOLICITUD
+// =========================================================
+
+async function enviarOtraSolicitud() {
 
     const campo =
         document.getElementById(
@@ -177,7 +328,9 @@ function enviarOtraSolicitud() {
 
 
     if (!campo) {
+
         return;
+
     }
 
 
@@ -188,7 +341,7 @@ function enviarOtraSolicitud() {
     if (mensaje === "") {
 
         alert(
-            "Por favor escribe tu solicitud."
+            "Escribe tu solicitud."
         );
 
         return;
@@ -196,78 +349,183 @@ function enviarOtraSolicitud() {
     }
 
 
-    let solicitudes =
+    const cliente =
+        obtenerCliente();
+
+
+    // Local
+
+    const asistencias =
         JSON.parse(
-            localStorage.getItem("asistencias")
+            localStorage.getItem(
+                "asistencias"
+            )
         ) || [];
 
 
-    let nuevaSolicitud = {
+    asistencias.push({
 
-        mesa: mesa,
+        mesa:
+            cliente.mesa,
 
-        tipo: "Otra solicitud",
+        tipo:
+            "Otra solicitud",
 
-        mensaje: mensaje,
+        mensaje:
+            cliente.nombre +
+            " " +
+            cliente.apellido +
+            ": " +
+            mensaje,
 
-        fecha: new Date().toLocaleString(),
+        fecha:
+            new Date().toISOString(),
 
-        estado: "Pendiente"
+        estado:
+            "Pendiente"
 
-    };
-
-
-    solicitudes.push(nuevaSolicitud);
+    });
 
 
     localStorage.setItem(
         "asistencias",
-        JSON.stringify(solicitudes)
+        JSON.stringify(
+            asistencias
+        )
     );
+
+
+    // Supabase
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("asistencias")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    tipo:
+                        "Otra solicitud",
+
+                    mensaje:
+                        cliente.nombre +
+                        " " +
+                        cliente.apellido +
+                        ": " +
+                        mensaje,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
 
 
     campo.value = "";
 
-
     alert(
-        "🆘 Solicitud enviada correctamente.\n\n" +
-        "Mesa: " +
-        mesa
+        "✅ Solicitud enviada."
     );
 
 }
 
 
-/* =========================================================
-   8. SOLICITAR LA CUENTA
-   ========================================================= */
 
-function solicitarCuenta() {
+// =========================================================
+// PEDIR CUENTA
+// =========================================================
 
-    let cuentas =
+async function solicitarCuenta() {
+
+    const cliente =
+        obtenerCliente();
+
+
+    // Local
+
+    const cuentas =
         JSON.parse(
-            localStorage.getItem("cuentas")
+            localStorage.getItem(
+                "cuentas"
+            )
         ) || [];
 
 
-    let nuevaCuenta = {
+    cuentas.push({
 
-        mesa: mesa,
+        mesa:
+            cliente.mesa,
 
-        fecha: new Date().toLocaleString(),
+        cliente:
+            cliente.nombre +
+            " " +
+            cliente.apellido,
 
-        estado: "Pendiente"
+        fecha:
+            new Date().toISOString(),
 
-    };
+        estado:
+            "Pendiente"
 
-
-    cuentas.push(nuevaCuenta);
+    });
 
 
     localStorage.setItem(
         "cuentas",
-        JSON.stringify(cuentas)
+        JSON.stringify(
+            cuentas
+        )
     );
+
+
+    // Supabase
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("cuentas")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
 
 
     const tarjeta =
@@ -284,30 +542,26 @@ function solicitarCuenta() {
 
     if (tarjeta) {
 
-        tarjeta.style.display = "none";
+        tarjeta.style.display =
+            "none";
 
     }
 
 
     if (mensaje) {
 
-        mensaje.style.display = "block";
+        mensaje.style.display =
+            "block";
 
     }
-
-
-    alert(
-        "🧾 Se ha solicitado la cuenta.\n\n" +
-        "Mesa: " +
-        mesa
-    );
 
 }
 
 
-/* =========================================================
-   9. SELECCIONAR FORMA DE PAGO
-   ========================================================= */
+
+// =========================================================
+// PAGOS
+// =========================================================
 
 function seleccionarPago(metodo) {
 
@@ -323,18 +577,21 @@ function seleccionarPago(metodo) {
         );
 
 
-    const detallePago =
+    const detalle =
         document.getElementById(
             "detallePago"
         );
 
 
     if (!informacion) {
+
         return;
+
     }
 
 
-    informacion.style.display = "block";
+    informacion.style.display =
+        "block";
 
 
     if (metodoSeleccionado) {
@@ -345,53 +602,23 @@ function seleccionarPago(metodo) {
     }
 
 
-    if (detallePago) {
+    if (detalle) {
 
-        if (metodo === "Efectivo") {
-
-            detallePago.textContent =
-                "Puedes pagar directamente en caja o al mesero.";
-
-        }
-
-        else if (metodo === "Tarjeta") {
-
-            detallePago.textContent =
-                "Puedes pagar con tarjeta al momento de recibir tu cuenta.";
-
-        }
-
-        else if (metodo === "Transferencia bancaria") {
-
-            detallePago.textContent =
-                "Realiza la transferencia utilizando los datos proporcionados por el restaurante.";
-
-        }
-
-        else if (metodo === "Pago con QR") {
-
-            detallePago.textContent =
-                "Escanea el código QR de pago proporcionado por el restaurante.";
-
-        }
-
-        else {
-
-            detallePago.textContent =
-                "Forma de pago seleccionada.";
-
-        }
+        detalle.textContent =
+            "Has seleccionado: " +
+            metodo;
 
     }
 
 }
 
 
-/* =========================================================
-   10. CONFIRMAR FORMA DE PAGO
-   ========================================================= */
 
-function confirmarPago() {
+// =========================================================
+// CONFIRMAR PAGO
+// =========================================================
+
+async function confirmarPago() {
 
     const metodoElemento =
         document.getElementById(
@@ -400,51 +627,100 @@ function confirmarPago() {
 
 
     if (!metodoElemento) {
+
         return;
+
     }
 
 
     const metodo =
-        metodoElemento.textContent.trim();
+        metodoElemento.textContent;
 
 
-    if (metodo === "") {
-
-        alert(
-            "Primero selecciona una forma de pago."
-        );
-
-        return;
-
-    }
+    const cliente =
+        obtenerCliente();
 
 
-    let pagos =
+    // Local
+
+    const pagos =
         JSON.parse(
-            localStorage.getItem("pagos")
+            localStorage.getItem(
+                "pagos"
+            )
         ) || [];
 
 
-    let nuevoPago = {
+    pagos.push({
 
-        mesa: mesa,
+        mesa:
+            cliente.mesa,
 
-        metodo: metodo,
+        metodo:
+            metodo,
 
-        fecha: new Date().toLocaleString(),
+        cliente:
+            cliente.nombre +
+            " " +
+            cliente.apellido,
 
-        estado: "Pendiente"
+        fecha:
+            new Date().toISOString(),
 
-    };
+        estado:
+            "Pendiente"
 
-
-    pagos.push(nuevoPago);
+    });
 
 
     localStorage.setItem(
         "pagos",
-        JSON.stringify(pagos)
+        JSON.stringify(
+            pagos
+        )
     );
+
+
+    // Supabase
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("pagos")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    metodo:
+                        metodo,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+
+    const informacion =
+        document.getElementById(
+            "informacionPago"
+        );
 
 
     const mensaje =
@@ -453,54 +729,74 @@ function confirmarPago() {
         );
 
 
-    if (mensaje) {
+    if (informacion) {
 
-        mensaje.style.display = "block";
+        informacion.style.display =
+            "none";
 
     }
 
 
-    alert(
-        "💳 Forma de pago registrada.\n\n" +
-        "Método: " +
-        metodo +
-        "\nMesa: " +
-        mesa
-    );
+    if (mensaje) {
+
+        mensaje.style.display =
+            "block";
+
+    }
 
 }
 
 
-/* =========================================================
-   11. OBTENER PEDIDO
-   ========================================================= */
+
+// =========================================================
+// PEDIDO
+// =========================================================
 
 function obtenerPedido() {
 
+    const mesa =
+        obtenerMesa();
+
+
     return JSON.parse(
-        localStorage.getItem("pedido_" + mesa)
+
+        localStorage.getItem(
+            "pedido_" + mesa
+        )
+
     ) || [];
 
 }
 
 
-/* =========================================================
-   12. GUARDAR PEDIDO
-   ========================================================= */
+
+// =========================================================
+// GUARDAR PEDIDO
+// =========================================================
 
 function guardarPedido(pedido) {
 
+    const mesa =
+        obtenerMesa();
+
+
     localStorage.setItem(
+
         "pedido_" + mesa,
-        JSON.stringify(pedido)
+
+        JSON.stringify(
+            pedido
+        )
+
     );
 
 }
 
 
-/* =========================================================
-   13. AGREGAR PRODUCTO AL PEDIDO
-   ========================================================= */
+
+// =========================================================
+// AGREGAR PRODUCTO
+// =========================================================
 
 function agregarProducto(
     id,
@@ -508,98 +804,111 @@ function agregarProducto(
     precio
 ) {
 
-    let pedido =
+    const pedido =
         obtenerPedido();
 
 
-    let productoExistente =
-        pedido.find(function(producto) {
-
-            return producto.id === id;
-
-        });
+    const productoExistente =
+        pedido.find(
+            producto =>
+                producto.id === id
+        );
 
 
     if (productoExistente) {
 
         productoExistente.cantidad++;
 
-    }
-
-    else {
+    } else {
 
         pedido.push({
 
-            id: id,
+            id:
+                id,
 
-            nombre: nombre,
+            nombre:
+                nombre,
 
-            precio: Number(precio),
+            precio:
+                precio,
 
-            cantidad: 1
+            cantidad:
+                1
 
         });
 
     }
 
 
-    guardarPedido(pedido);
+    guardarPedido(
+        pedido
+    );
 
 
     actualizarContador();
 
 
     alert(
-        "✅ " +
-        nombre +
-        " agregado al pedido."
+        "✅ Producto agregado al pedido."
     );
 
 }
 
 
-/* =========================================================
-   14. CAMBIAR CANTIDAD
-   ========================================================= */
+
+// =========================================================
+// CAMBIAR CANTIDAD
+// =========================================================
 
 function cambiarCantidad(
     id,
     cambio
 ) {
 
-    let pedido =
+    const pedido =
         obtenerPedido();
 
 
-    let producto =
-        pedido.find(function(item) {
-
-            return item.id === id;
-
-        });
+    const producto =
+        pedido.find(
+            producto =>
+                producto.id === id
+        );
 
 
     if (!producto) {
+
         return;
-    }
-
-
-    producto.cantidad += cambio;
-
-
-    if (producto.cantidad <= 0) {
-
-        pedido =
-            pedido.filter(function(item) {
-
-                return item.id !== id;
-
-            });
 
     }
 
 
-    guardarPedido(pedido);
+    producto.cantidad +=
+        cambio;
+
+
+    if (
+        producto.cantidad <= 0
+    ) {
+
+        const posicion =
+            pedido.findIndex(
+                producto =>
+                    producto.id === id
+            );
+
+
+        pedido.splice(
+            posicion,
+            1
+        );
+
+    }
+
+
+    guardarPedido(
+        pedido
+    );
 
 
     mostrarPedido();
@@ -610,25 +919,27 @@ function cambiarCantidad(
 }
 
 
-/* =========================================================
-   15. ELIMINAR PRODUCTO
-   ========================================================= */
+
+// =========================================================
+// ELIMINAR PRODUCTO
+// =========================================================
 
 function eliminarProducto(id) {
 
-    let pedido =
+    const pedido =
         obtenerPedido();
 
 
-    pedido =
-        pedido.filter(function(item) {
+    const nuevoPedido =
+        pedido.filter(
+            producto =>
+                producto.id !== id
+        );
 
-            return item.id !== id;
 
-        });
-
-
-    guardarPedido(pedido);
+    guardarPedido(
+        nuevoPedido
+    );
 
 
     mostrarPedido();
@@ -639,9 +950,10 @@ function eliminarProducto(id) {
 }
 
 
-/* =========================================================
-   16. MOSTRAR PEDIDO
-   ========================================================= */
+
+// =========================================================
+// MOSTRAR PEDIDO
+// =========================================================
 
 function mostrarPedido() {
 
@@ -658,149 +970,9 @@ function mostrarPedido() {
 
 
     if (!lista) {
-        return;
-    }
-
-
-    let pedido =
-        obtenerPedido();
-
-
-    if (pedido.length === 0) {
-
-        lista.innerHTML = `
-            <div class="pedido-vacio">
-                <p>🛒 Tu pedido está vacío.</p>
-            </div>
-        `;
-
-
-        if (totalElemento) {
-
-            totalElemento.textContent =
-                "$0.00";
-
-        }
-
 
         return;
 
-    }
-
-
-    let total = 0;
-
-
-    lista.innerHTML = "";
-
-
-    pedido.forEach(function(producto) {
-
-        const subtotal =
-            producto.precio *
-            producto.cantidad;
-
-
-        total += subtotal;
-
-
-        const elemento =
-            document.createElement("div");
-
-
-        elemento.className =
-            "producto-pedido";
-
-
-        elemento.innerHTML = `
-
-            <div>
-
-                <strong>
-                    ${producto.nombre}
-                </strong>
-
-                <p>
-                    $${producto.precio.toFixed(2)}
-                    cada uno
-                </p>
-
-            </div>
-
-
-            <div class="cantidad">
-
-                <button
-                    type="button"
-                    onclick="cambiarCantidad('${producto.id}', -1)">
-                    −
-                </button>
-
-
-                <span>
-                    ${producto.cantidad}
-                </span>
-
-
-                <button
-                    type="button"
-                    onclick="cambiarCantidad('${producto.id}', 1)">
-                    +
-                </button>
-
-            </div>
-
-
-            <div>
-
-                <strong>
-                    $${subtotal.toFixed(2)}
-                </strong>
-
-
-                <button
-                    type="button"
-                    class="eliminar"
-                    onclick="eliminarProducto('${producto.id}')">
-
-                    Eliminar
-
-                </button>
-
-            </div>
-
-        `;
-
-
-        lista.appendChild(elemento);
-
-    });
-
-
-    if (totalElemento) {
-
-        totalElemento.textContent =
-            "$" + total.toFixed(2);
-
-    }
-
-}
-
-
-/* =========================================================
-   17. ACTUALIZAR CONTADOR DEL PEDIDO
-   ========================================================= */
-
-function actualizarContador() {
-
-    const contador =
-        document.getElementById(
-            "contadorPedido"
-        );
-
-
-    if (!contador) {
-        return;
     }
 
 
@@ -808,30 +980,166 @@ function actualizarContador() {
         obtenerPedido();
 
 
-    let cantidadTotal = 0;
+    lista.innerHTML = "";
 
 
-    pedido.forEach(function(producto) {
-
-        cantidadTotal +=
-            producto.cantidad;
-
-    });
+    let total = 0;
 
 
-    contador.textContent =
-        cantidadTotal;
+    if (pedido.length === 0) {
+
+        lista.innerHTML =
+            "<p>No hay productos en tu pedido.</p>";
+
+
+        if (totalElemento) {
+
+            totalElemento.textContent =
+                "0.00";
+
+        }
+
+        return;
+
+    }
+
+
+    pedido.forEach(
+        producto => {
+
+
+            const subtotal =
+                producto.precio *
+                producto.cantidad;
+
+
+            total +=
+                subtotal;
+
+
+            const elemento =
+                document.createElement(
+                    "div"
+                );
+
+
+            elemento.className =
+                "producto-pedido";
+
+
+            elemento.innerHTML = `
+
+                <strong>
+                    ${producto.nombre}
+                </strong>
+
+                <p>
+                    $${producto.precio.toFixed(2)}
+                </p>
+
+                <p>
+                    Cantidad:
+                    ${producto.cantidad}
+                </p>
+
+                <button
+                    onclick="cambiarCantidad(
+                        '${producto.id}',
+                        1
+                    )">
+
+                    +
+
+                </button>
+
+                <button
+                    onclick="cambiarCantidad(
+                        '${producto.id}',
+                        -1
+                    )">
+
+                    -
+
+                </button>
+
+                <button
+                    onclick="eliminarProducto(
+                        '${producto.id}'
+                    )">
+
+                    Eliminar
+
+                </button>
+
+            `;
+
+
+            lista.appendChild(
+                elemento
+            );
+
+        }
+    );
+
+
+    if (totalElemento) {
+
+        totalElemento.textContent =
+            total.toFixed(2);
+
+    }
 
 }
 
 
-/* =========================================================
-   18. ENVIAR PEDIDO
-   ========================================================= */
 
-function enviarPedido() {
+// =========================================================
+// CONTADOR DEL PEDIDO
+// =========================================================
 
-    let pedido =
+function actualizarContador() {
+
+    const pedido =
+        obtenerPedido();
+
+
+    const cantidad =
+        pedido.reduce(
+            (
+                total,
+                producto
+            ) =>
+                total +
+                producto.cantidad,
+
+            0
+        );
+
+
+    const contador =
+        document.getElementById(
+            "contadorPedido"
+        );
+
+
+    if (contador) {
+
+        contador.textContent =
+            cantidad;
+
+    }
+
+}
+
+
+
+// =========================================================
+// ENVIAR PEDIDO
+// =========================================================
+
+async function enviarPedido() {
+
+    const pedido =
         obtenerPedido();
 
 
@@ -846,7 +1154,29 @@ function enviarPedido() {
     }
 
 
-    let pedidosEnviados =
+    const cliente =
+        obtenerCliente();
+
+
+    let total = 0;
+
+
+    pedido.forEach(
+        producto => {
+
+            total +=
+                producto.precio *
+                producto.cantidad;
+
+        }
+    );
+
+
+    // =====================================
+    // GUARDAR LOCALMENTE
+    // =====================================
+
+    const pedidosEnviados =
         JSON.parse(
             localStorage.getItem(
                 "pedidosEnviados"
@@ -854,36 +1184,29 @@ function enviarPedido() {
         ) || [];
 
 
-    let total = 0;
+    pedidosEnviados.push({
 
+        mesa:
+            cliente.mesa,
 
-    pedido.forEach(function(producto) {
+        cliente:
+            cliente.nombre +
+            " " +
+            cliente.apellido,
 
-        total +=
-            producto.precio *
-            producto.cantidad;
+        productos:
+            pedido,
+
+        total:
+            total,
+
+        fecha:
+            new Date().toISOString(),
+
+        estado:
+            "Pendiente"
 
     });
-
-
-    let nuevoPedido = {
-
-        mesa: mesa,
-
-        productos: pedido,
-
-        total: total,
-
-        fecha: new Date().toLocaleString(),
-
-        estado: "Pendiente"
-
-    };
-
-
-    pedidosEnviados.push(
-        nuevoPedido
-    );
 
 
     localStorage.setItem(
@@ -894,36 +1217,86 @@ function enviarPedido() {
     );
 
 
-    // Vaciar carrito
 
-    localStorage.removeItem(
-        "pedido_" + mesa
-    );
+    // =====================================
+    // ENVIAR A SUPABASE
+    // =====================================
+
+    if (
+        window.supabaseClient
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from("pedidos")
+                .insert([{
+
+                    mesa:
+                        cliente.mesa,
+
+                    productos:
+                        pedido,
+
+                    total:
+                        total,
+
+                    estado:
+                        "Pendiente"
+
+                }]);
+
+
+        if (error) {
+
+            console.error(
+                "Error enviando pedido:",
+                error
+            );
+
+            alert(
+                "El pedido se guardó localmente, pero hubo un problema conectando con el servidor."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    // =====================================
+    // LIMPIAR CARRITO
+    // =====================================
+
+    guardarPedido([]);
 
 
     alert(
-        "✅ ¡Pedido enviado correctamente!\n\n" +
-        "Mesa: " +
-        mesa +
-        "\nTotal: $" +
-        total.toFixed(2)
+        "✅ Pedido enviado correctamente."
     );
 
+
+    // Volver al inicio
 
     irA("index.html");
 
 }
 
 
-/* =========================================================
-   19. EJECUTAR FUNCIONES AL CARGAR
-   ========================================================= */
+
+// =========================================================
+// INICIAR
+// =========================================================
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function () {
 
         actualizarContador();
+
+        mostrarPedido();
 
     }
 );
