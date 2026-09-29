@@ -12,10 +12,269 @@
 
     <link rel="stylesheet" href="estilo.css">
 
+
+    <style>
+
+        /* =====================================
+           PANTALLA DE BIENVENIDA
+        ===================================== */
+
+        #pantallaLogin {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: #ffffff;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            z-index: 99999;
+
+            padding: 20px;
+
+            box-sizing: border-box;
+        }
+
+
+        .caja-login {
+
+            width: 100%;
+
+            max-width: 400px;
+
+            background: white;
+
+            padding: 35px 25px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 5px 25px rgba(0,0,0,0.15);
+
+            text-align: center;
+
+            box-sizing: border-box;
+        }
+
+
+        .logo-login {
+
+            font-size: 55px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .titulo-login {
+
+            margin: 0;
+
+            font-size: 28px;
+
+            color: #222;
+        }
+
+
+        .texto-login {
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+            font-size: 15px;
+        }
+
+
+        .campo-login {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-bottom: 15px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            box-sizing: border-box;
+
+            outline: none;
+        }
+
+
+        .campo-login:focus {
+
+            border-color: #222;
+        }
+
+
+        .boton-login {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #222;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .boton-login:hover {
+
+            opacity: 0.9;
+        }
+
+
+        .error-login {
+
+            color: #d00000;
+
+            font-size: 14px;
+
+            margin-top: 12px;
+
+            display: none;
+        }
+
+
+        .mesa-login {
+
+            margin-top: 20px;
+
+            font-size: 14px;
+
+            color: #777;
+        }
+
+
+        #clienteActual {
+
+            margin: 5px 0 0 0;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+
+        /* =====================================
+           BOTÓN CERRAR SESIÓN
+        ===================================== */
+
+        .boton-salir {
+
+            margin-top: 8px;
+
+            border: none;
+
+            background: transparent;
+
+            color: #888;
+
+            font-size: 12px;
+
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
 
 <body>
+
+
+<!-- =====================================
+     PANTALLA DE LOGIN
+===================================== -->
+
+<div id="pantallaLogin">
+
+    <div class="caja-login">
+
+        <div class="logo-login">
+            🍽️
+        </div>
+
+
+        <h1 class="titulo-login">
+            ¡Bienvenido!
+        </h1>
+
+
+        <p class="texto-login">
+            Para continuar, ingresa tu nombre y apellido.
+        </p>
+
+
+        <input
+            type="text"
+            id="nombreCliente"
+            class="campo-login"
+            placeholder="Nombre"
+            autocomplete="given-name"
+        >
+
+
+        <input
+            type="text"
+            id="apellidoCliente"
+            class="campo-login"
+            placeholder="Apellido"
+            autocomplete="family-name"
+        >
+
+
+        <button
+            type="button"
+            id="botonContinuar"
+            class="boton-login">
+
+            CONTINUAR
+
+        </button>
+
+
+        <p
+            id="errorLogin"
+            class="error-login">
+
+        </p>
+
+
+        <div class="mesa-login">
+
+            Mesa:
+            <span id="mesaLogin">1</span>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 
 <!-- =====================================
@@ -28,20 +287,26 @@
         🍽️
     </div>
 
+
     <h1>
         RESTAURANTE QR
     </h1>
 
+
     <p>
-        Mesa: <span id="mesa">1</span>
+        Mesa:
+        <span id="mesa">1</span>
     </p>
+
+
+    <p id="clienteActual"></p>
 
 </header>
 
 
 
 <!-- =====================================
-     CONTENIDO PRINCIPAL
+     CONTENIDO
 ===================================== -->
 
 <main class="contenedor">
@@ -55,9 +320,7 @@
     <div class="opciones">
 
 
-        <!-- ===============================
-             VER MENÚ
-        ================================ -->
+        <!-- VER MENÚ -->
 
         <div class="opcion">
 
@@ -86,9 +349,7 @@
 
 
 
-        <!-- ===============================
-             HACER PEDIDO
-        ================================ -->
+        <!-- HACER PEDIDO -->
 
         <div class="opcion">
 
@@ -117,9 +378,7 @@
 
 
 
-        <!-- ===============================
-             LLAMAR MESERO
-        ================================ -->
+        <!-- LLAMAR MESERO -->
 
         <div class="opcion">
 
@@ -148,9 +407,7 @@
 
 
 
-        <!-- ===============================
-             PEDIR CUENTA
-        ================================ -->
+        <!-- PEDIR CUENTA -->
 
         <div class="opcion">
 
@@ -179,9 +436,7 @@
 
 
 
-        <!-- ===============================
-             ASISTENCIA
-        ================================ -->
+        <!-- ASISTENCIA -->
 
         <div class="opcion">
 
@@ -210,9 +465,7 @@
 
 
 
-        <!-- ===============================
-             FORMAS DE PAGO
-        ================================ -->
+        <!-- FORMAS DE PAGO -->
 
         <div class="opcion">
 
@@ -242,13 +495,12 @@
 
     </div>
 
-
 </main>
 
 
 
 <!-- =====================================
-     PIE DE PÁGINA
+     PIE
 ===================================== -->
 
 <footer>
@@ -260,12 +512,314 @@
 
 
 <!-- =====================================
-     JAVASCRIPT
+     SUPABASE
 ===================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 <script src="app.js"></script>
+
+
+
+<!-- =====================================
+     SISTEMA DE CLIENTE
+===================================== -->
+
+<script>
+
+(function () {
+
+
+    // =====================================
+    // OBTENER MESA DEL QR
+    // =====================================
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const mesaActual =
+        parametros.get("mesa") || "1";
+
+
+    // =====================================
+    // MOSTRAR MESA
+    // =====================================
+
+    document.getElementById(
+        "mesa"
+    ).textContent = mesaActual;
+
+
+    document.getElementById(
+        "mesaLogin"
+    ).textContent = mesaActual;
+
+
+
+    // =====================================
+    // DATOS GUARDADOS
+    // =====================================
+
+    const mesaGuardada =
+        sessionStorage.getItem(
+            "clienteMesa"
+        );
+
+    const nombreGuardado =
+        sessionStorage.getItem(
+            "clienteNombre"
+        );
+
+    const apellidoGuardado =
+        sessionStorage.getItem(
+            "clienteApellido"
+        );
+
+
+
+    // =====================================
+    // SI CAMBIÓ DE MESA
+    // =====================================
+
+    if (
+        mesaGuardada &&
+        mesaGuardada !== mesaActual
+    ) {
+
+        sessionStorage.removeItem(
+            "clienteNombre"
+        );
+
+        sessionStorage.removeItem(
+            "clienteApellido"
+        );
+
+        sessionStorage.removeItem(
+            "clienteMesa"
+        );
+
+    }
+
+
+
+    // =====================================
+    // FUNCIÓN MOSTRAR CLIENTE
+    // =====================================
+
+    function mostrarCliente(
+        nombre,
+        apellido
+    ) {
+
+        document.getElementById(
+            "clienteActual"
+        ).textContent =
+            "Cliente: " +
+            nombre +
+            " " +
+            apellido;
+
+    }
+
+
+
+    // =====================================
+    // FUNCIÓN MOSTRAR LOGIN
+    // =====================================
+
+    function mostrarLogin() {
+
+        document.getElementById(
+            "pantallaLogin"
+        ).style.display = "flex";
+
+    }
+
+
+
+    // =====================================
+    // FUNCIÓN OCULTAR LOGIN
+    // =====================================
+
+    function ocultarLogin() {
+
+        document.getElementById(
+            "pantallaLogin"
+        ).style.display = "none";
+
+    }
+
+
+
+    // =====================================
+    // COMPROBAR SESIÓN
+    // =====================================
+
+    const nombre =
+        sessionStorage.getItem(
+            "clienteNombre"
+        );
+
+    const apellido =
+        sessionStorage.getItem(
+            "clienteApellido"
+        );
+
+    const mesaSesion =
+        sessionStorage.getItem(
+            "clienteMesa"
+        );
+
+
+    if (
+        nombre &&
+        apellido &&
+        mesaSesion === mesaActual
+    ) {
+
+        ocultarLogin();
+
+        mostrarCliente(
+            nombre,
+            apellido
+        );
+
+    } else {
+
+        mostrarLogin();
+
+    }
+
+
+
+    // =====================================
+    // BOTÓN CONTINUAR
+    // =====================================
+
+    document.getElementById(
+        "botonContinuar"
+    ).addEventListener(
+        "click",
+        function () {
+
+
+            const nombre =
+                document.getElementById(
+                    "nombreCliente"
+                ).value.trim();
+
+
+            const apellido =
+                document.getElementById(
+                    "apellidoCliente"
+                ).value.trim();
+
+
+            const error =
+                document.getElementById(
+                    "errorLogin"
+                );
+
+
+
+            // =================================
+            // VALIDAR NOMBRE
+            // =================================
+
+            if (nombre === "") {
+
+                error.textContent =
+                    "Por favor, escribe tu nombre.";
+
+                error.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+
+            // =================================
+            // VALIDAR APELLIDO
+            // =================================
+
+            if (apellido === "") {
+
+                error.textContent =
+                    "Por favor, escribe tu apellido.";
+
+                error.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+
+            // =================================
+            // GUARDAR CLIENTE
+            // =================================
+
+            sessionStorage.setItem(
+                "clienteNombre",
+                nombre
+            );
+
+
+            sessionStorage.setItem(
+                "clienteApellido",
+                apellido
+            );
+
+
+            sessionStorage.setItem(
+                "clienteMesa",
+                mesaActual
+            );
+
+
+
+            // =================================
+            // OCULTAR ERROR
+            // =================================
+
+            error.style.display =
+                "none";
+
+
+
+            // =================================
+            // OCULTAR LOGIN
+            // =================================
+
+            ocultarLogin();
+
+
+
+            // =================================
+            // MOSTRAR CLIENTE
+            // =================================
+
+            mostrarCliente(
+                nombre,
+                apellido
+            );
+
+        }
+    );
+
+
+
+})();
+
+</script>
 
 
 </body>
