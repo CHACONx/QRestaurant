@@ -1,67 +1,53 @@
-// ======================================================
-// RESTAURANTE QR
-// JAVASCRIPT PRINCIPAL
-// ======================================================
+/* =========================================================
+   RESTAURANTE QR - APP.JS
+   ========================================================= */
 
 
-// ======================================================
-// IDENTIFICAR LA MESA
-// ======================================================
+/* =========================================================
+   1. IDENTIFICAR LA MESA
+   ========================================================= */
 
-const parametros = new URLSearchParams(
-    window.location.search
-);
-
+const parametros = new URLSearchParams(window.location.search);
 
 let mesaURL = parametros.get("mesa");
 
-
-// Si la URL contiene una mesa,
-// la guardamos.
-
-if (mesaURL) {
-
-    localStorage.setItem(
-        "mesa",
-        mesaURL
-    );
-
-}
+let mesaGuardada = localStorage.getItem("mesa");
 
 
-// Obtener mesa guardada
+// Si anteriormente se guardó "Mesa: 1",
+// eliminamos la parte "Mesa:".
+if (mesaGuardada) {
 
-let mesa = localStorage.getItem("mesa");
-
-
-// Si no existe,
-// usamos Mesa 1 para pruebas.
-
-if (!mesa) {
-
-    mesa = "1";
+    mesaGuardada = mesaGuardada
+        .replace("Mesa:", "")
+        .replace("mesa:", "")
+        .trim();
 
 }
 
 
-// Mostrar mesa en cualquier página
-
-const elementosMesa =
-    document.querySelectorAll("#mesa");
+// Obtener la mesa
+let mesa = mesaURL || mesaGuardada || "1";
 
 
-elementosMesa.forEach(function(elemento) {
+// Guardar solamente el número
+localStorage.setItem("mesa", mesa);
 
-    elemento.textContent =
-        "Mesa: " + mesa;
+
+/* =========================================================
+   2. MOSTRAR LA MESA EN TODAS LAS PÁGINAS
+   ========================================================= */
+
+document.querySelectorAll("#mesa").forEach(function(elemento) {
+
+    elemento.textContent = mesa;
 
 });
 
 
-
-// ======================================================
-// NAVEGACIÓN
-// ======================================================
+/* =========================================================
+   3. IR A OTRA PÁGINA MANTENIENDO LA MESA
+   ========================================================= */
 
 function irA(pagina) {
 
@@ -71,31 +57,11 @@ function irA(pagina) {
 }
 
 
-
-// ======================================================
-// LLAMAR AL MESERO
-// ======================================================
+/* =========================================================
+   4. LLAMAR AL MESERO
+   ========================================================= */
 
 function llamarMesero() {
-
-
-    const confirmar = confirm(
-
-        "🛎️ LLAMAR AL MESERO\n\n" +
-
-        "Mesa: " + mesa + "\n\n" +
-
-        "¿Deseas solicitar al mesero?"
-
-    );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
 
     let solicitudes =
         JSON.parse(
@@ -103,9 +69,7 @@ function llamarMesero() {
         ) || [];
 
 
-    solicitudes.push({
-
-        id: Date.now(),
+    let nuevaSolicitud = {
 
         mesa: mesa,
 
@@ -115,56 +79,31 @@ function llamarMesero() {
 
         estado: "Pendiente"
 
-    });
+    };
+
+
+    solicitudes.push(nuevaSolicitud);
 
 
     localStorage.setItem(
-
         "asistencias",
-
         JSON.stringify(solicitudes)
-
     );
 
 
     alert(
-
-        "✅ Solicitud enviada.\n\n" +
-
-        "Mesa: " + mesa
-
+        "🔔 El mesero ha sido llamado.\n\nMesa: " +
+        mesa
     );
 
 }
 
 
-
-// ======================================================
-// ASISTENCIA
-// ======================================================
+/* =========================================================
+   5. SOLICITAR ASISTENCIA
+   ========================================================= */
 
 function solicitarAyuda(tipo) {
-
-
-    const confirmar = confirm(
-
-        "🆘 SOLICITUD DE ASISTENCIA\n\n" +
-
-        "Mesa: " + mesa + "\n" +
-
-        "Solicitud: " + tipo + "\n\n" +
-
-        "¿Deseas enviar esta solicitud?"
-
-    );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
 
     let solicitudes =
         JSON.parse(
@@ -172,9 +111,7 @@ function solicitarAyuda(tipo) {
         ) || [];
 
 
-    solicitudes.push({
-
-        id: Date.now(),
+    let nuevaSolicitud = {
 
         mesa: mesa,
 
@@ -184,38 +121,33 @@ function solicitarAyuda(tipo) {
 
         estado: "Pendiente"
 
-    });
+    };
+
+
+    solicitudes.push(nuevaSolicitud);
 
 
     localStorage.setItem(
-
         "asistencias",
-
         JSON.stringify(solicitudes)
-
     );
 
 
     alert(
-
-        "✅ Solicitud enviada.\n\n" +
-
-        "Mesa: " + mesa + "\n" +
-
-        tipo
-
+        "🆘 Solicitud enviada.\n\n" +
+        tipo +
+        "\nMesa: " +
+        mesa
     );
 
 }
 
 
-
-// ======================================================
-// OTRA ASISTENCIA
-// ======================================================
+/* =========================================================
+   6. MOSTRAR CAMPO PARA OTRA SOLICITUD
+   ========================================================= */
 
 function mostrarOtraAsistencia() {
-
 
     const elemento =
         document.getElementById(
@@ -225,21 +157,18 @@ function mostrarOtraAsistencia() {
 
     if (elemento) {
 
-        elemento.style.display =
-            "block";
+        elemento.style.display = "block";
 
     }
 
 }
 
 
-
-// ======================================================
-// ENVIAR OTRA ASISTENCIA
-// ======================================================
+/* =========================================================
+   7. ENVIAR OTRA SOLICITUD
+   ========================================================= */
 
 function enviarOtraSolicitud() {
-
 
     const campo =
         document.getElementById(
@@ -248,9 +177,7 @@ function enviarOtraSolicitud() {
 
 
     if (!campo) {
-
         return;
-
     }
 
 
@@ -261,7 +188,7 @@ function enviarOtraSolicitud() {
     if (mensaje === "") {
 
         alert(
-            "⚠️ Escribe qué necesitas."
+            "Por favor escribe tu solicitud."
         );
 
         return;
@@ -275,27 +202,27 @@ function enviarOtraSolicitud() {
         ) || [];
 
 
-    solicitudes.push({
-
-        id: Date.now(),
+    let nuevaSolicitud = {
 
         mesa: mesa,
 
-        tipo: mensaje,
+        tipo: "Otra solicitud",
+
+        mensaje: mensaje,
 
         fecha: new Date().toLocaleString(),
 
         estado: "Pendiente"
 
-    });
+    };
+
+
+    solicitudes.push(nuevaSolicitud);
 
 
     localStorage.setItem(
-
         "asistencias",
-
         JSON.stringify(solicitudes)
-
     );
 
 
@@ -303,41 +230,19 @@ function enviarOtraSolicitud() {
 
 
     alert(
-
-        "✅ Solicitud enviada.\n\n" +
-
-        "Mesa: " + mesa
-
+        "🆘 Solicitud enviada correctamente.\n\n" +
+        "Mesa: " +
+        mesa
     );
 
 }
 
 
-
-// ======================================================
-// PEDIR CUENTA
-// ======================================================
+/* =========================================================
+   8. SOLICITAR LA CUENTA
+   ========================================================= */
 
 function solicitarCuenta() {
-
-
-    const confirmar = confirm(
-
-        "🧾 SOLICITAR CUENTA\n\n" +
-
-        "Mesa: " + mesa + "\n\n" +
-
-        "¿Deseas solicitar la cuenta?"
-
-    );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
 
     let cuentas =
         JSON.parse(
@@ -345,9 +250,7 @@ function solicitarCuenta() {
         ) || [];
 
 
-    cuentas.push({
-
-        id: Date.now(),
+    let nuevaCuenta = {
 
         mesa: mesa,
 
@@ -355,15 +258,15 @@ function solicitarCuenta() {
 
         estado: "Pendiente"
 
-    });
+    };
+
+
+    cuentas.push(nuevaCuenta);
 
 
     localStorage.setItem(
-
         "cuentas",
-
         JSON.stringify(cuentas)
-
     );
 
 
@@ -373,54 +276,40 @@ function solicitarCuenta() {
         );
 
 
-    if (tarjeta) {
-
-        tarjeta.style.display =
-            "none";
-
-    }
-
-
     const mensaje =
         document.getElementById(
             "mensajeCuenta"
         );
 
 
+    if (tarjeta) {
+
+        tarjeta.style.display = "none";
+
+    }
+
+
     if (mensaje) {
 
-        mensaje.style.display =
-            "block";
+        mensaje.style.display = "block";
 
     }
 
 
     alert(
-
-        "✅ Cuenta solicitada.\n\n" +
-
-        "Mesa: " + mesa
-
+        "🧾 Se ha solicitado la cuenta.\n\n" +
+        "Mesa: " +
+        mesa
     );
 
 }
 
 
-
-// ======================================================
-// FORMAS DE PAGO
-// ======================================================
-
-let metodoPagoSeleccionado = "";
-
-
+/* =========================================================
+   9. SELECCIONAR FORMA DE PAGO
+   ========================================================= */
 
 function seleccionarPago(metodo) {
-
-
-    metodoPagoSeleccionado =
-        metodo;
-
 
     const informacion =
         document.getElementById(
@@ -428,125 +317,101 @@ function seleccionarPago(metodo) {
         );
 
 
-    const metodoElemento =
+    const metodoSeleccionado =
         document.getElementById(
             "metodoSeleccionado"
         );
 
 
-    const detalle =
+    const detallePago =
         document.getElementById(
             "detallePago"
         );
 
 
     if (!informacion) {
-
         return;
+    }
+
+
+    informacion.style.display = "block";
+
+
+    if (metodoSeleccionado) {
+
+        metodoSeleccionado.textContent =
+            metodo;
 
     }
 
 
-    metodoElemento.textContent =
-        metodo;
+    if (detallePago) {
 
+        if (metodo === "Efectivo") {
 
+            detallePago.textContent =
+                "Puedes pagar directamente en caja o al mesero.";
 
-    if (metodo === "Efectivo") {
+        }
 
-        detalle.innerHTML = `
+        else if (metodo === "Tarjeta") {
 
-            <p>
-                💵 Puedes pagar
-                directamente al mesero
-                o en caja.
-            </p>
+            detallePago.textContent =
+                "Puedes pagar con tarjeta al momento de recibir tu cuenta.";
 
-        `;
+        }
 
-    }
+        else if (metodo === "Transferencia bancaria") {
 
+            detallePago.textContent =
+                "Realiza la transferencia utilizando los datos proporcionados por el restaurante.";
 
+        }
 
-    else if (metodo === "Tarjeta") {
+        else if (metodo === "Pago con QR") {
 
-        detalle.innerHTML = `
+            detallePago.textContent =
+                "Escanea el código QR de pago proporcionado por el restaurante.";
 
-            <p>
-                💳 Puedes pagar con
-                tarjeta de crédito
-                o débito.
-            </p>
+        }
 
-            <p>
-                El mesero llevará
-                la terminal a tu mesa.
-            </p>
+        else {
 
-        `;
+            detallePago.textContent =
+                "Forma de pago seleccionada.";
 
-    }
-
-
-
-    else if (
-        metodo === "Transferencia bancaria"
-    ) {
-
-        detalle.innerHTML = `
-
-            <p>
-                🏦 Solicita los datos
-                bancarios al personal
-                del restaurante.
-            </p>
-
-        `;
+        }
 
     }
-
-
-
-    else if (metodo === "Pago con QR") {
-
-        detalle.innerHTML = `
-
-            <p>
-                📱 Escanea el código QR
-                proporcionado por
-                el restaurante.
-            </p>
-
-        `;
-
-    }
-
-
-    informacion.style.display =
-        "block";
-
-
-    informacion.scrollIntoView({
-
-        behavior: "smooth"
-
-    });
 
 }
 
 
-
-// ======================================================
-// CONFIRMAR PAGO
-// ======================================================
+/* =========================================================
+   10. CONFIRMAR FORMA DE PAGO
+   ========================================================= */
 
 function confirmarPago() {
 
+    const metodoElemento =
+        document.getElementById(
+            "metodoSeleccionado"
+        );
 
-    if (!metodoPagoSeleccionado) {
+
+    if (!metodoElemento) {
+        return;
+    }
+
+
+    const metodo =
+        metodoElemento.textContent.trim();
+
+
+    if (metodo === "") {
 
         alert(
-            "⚠️ Selecciona un método de pago."
+            "Primero selecciona una forma de pago."
         );
 
         return;
@@ -560,42 +425,26 @@ function confirmarPago() {
         ) || [];
 
 
-    pagos.push({
-
-        id: Date.now(),
+    let nuevoPago = {
 
         mesa: mesa,
 
-        metodo: metodoPagoSeleccionado,
+        metodo: metodo,
 
         fecha: new Date().toLocaleString(),
 
-        estado: "Seleccionado"
+        estado: "Pendiente"
 
-    });
+    };
+
+
+    pagos.push(nuevoPago);
 
 
     localStorage.setItem(
-
         "pagos",
-
         JSON.stringify(pagos)
-
     );
-
-
-    const informacion =
-        document.getElementById(
-            "informacionPago"
-        );
-
-
-    if (informacion) {
-
-        informacion.style.display =
-            "none";
-
-    }
 
 
     const mensaje =
@@ -606,53 +455,52 @@ function confirmarPago() {
 
     if (mensaje) {
 
-        mensaje.style.display =
-            "block";
+        mensaje.style.display = "block";
 
     }
 
-}
 
-
-
-// ======================================================
-// PEDIDOS
-// ======================================================
-
-
-// Obtener pedido
-
-function obtenerPedido() {
-
-    return JSON.parse(
-
-        localStorage.getItem("pedido")
-
-    ) || [];
-
-}
-
-
-
-// Guardar pedido
-
-function guardarPedido(pedido) {
-
-    localStorage.setItem(
-
-        "pedido",
-
-        JSON.stringify(pedido)
-
+    alert(
+        "💳 Forma de pago registrada.\n\n" +
+        "Método: " +
+        metodo +
+        "\nMesa: " +
+        mesa
     );
 
 }
 
 
+/* =========================================================
+   11. OBTENER PEDIDO
+   ========================================================= */
 
-// ======================================================
-// AGREGAR PRODUCTO
-// ======================================================
+function obtenerPedido() {
+
+    return JSON.parse(
+        localStorage.getItem("pedido_" + mesa)
+    ) || [];
+
+}
+
+
+/* =========================================================
+   12. GUARDAR PEDIDO
+   ========================================================= */
+
+function guardarPedido(pedido) {
+
+    localStorage.setItem(
+        "pedido_" + mesa,
+        JSON.stringify(pedido)
+    );
+
+}
+
+
+/* =========================================================
+   13. AGREGAR PRODUCTO AL PEDIDO
+   ========================================================= */
 
 function agregarProducto(
     id,
@@ -660,21 +508,21 @@ function agregarProducto(
     precio
 ) {
 
-
     let pedido =
         obtenerPedido();
 
 
-    const existente =
-        pedido.find(
-            producto =>
-                producto.id === id
-        );
+    let productoExistente =
+        pedido.find(function(producto) {
+
+            return producto.id === id;
+
+        });
 
 
-    if (existente) {
+    if (productoExistente) {
 
-        existente.cantidad++;
+        productoExistente.cantidad++;
 
     }
 
@@ -686,7 +534,7 @@ function agregarProducto(
 
             nombre: nombre,
 
-            precio: precio,
+            precio: Number(precio),
 
             cantidad: 1
 
@@ -702,42 +550,37 @@ function agregarProducto(
 
 
     alert(
-
         "✅ " +
         nombre +
         " agregado al pedido."
-
     );
 
 }
 
 
-
-// ======================================================
-// CAMBIAR CANTIDAD
-// ======================================================
+/* =========================================================
+   14. CAMBIAR CANTIDAD
+   ========================================================= */
 
 function cambiarCantidad(
     id,
     cambio
 ) {
 
-
     let pedido =
         obtenerPedido();
 
 
-    const producto =
-        pedido.find(
-            producto =>
-                producto.id === id
-        );
+    let producto =
+        pedido.find(function(item) {
+
+            return item.id === id;
+
+        });
 
 
     if (!producto) {
-
         return;
-
     }
 
 
@@ -747,10 +590,11 @@ function cambiarCantidad(
     if (producto.cantidad <= 0) {
 
         pedido =
-            pedido.filter(
-                producto =>
-                    producto.id !== id
-            );
+            pedido.filter(function(item) {
+
+                return item.id !== id;
+
+            });
 
     }
 
@@ -766,23 +610,22 @@ function cambiarCantidad(
 }
 
 
-
-// ======================================================
-// ELIMINAR PRODUCTO
-// ======================================================
+/* =========================================================
+   15. ELIMINAR PRODUCTO
+   ========================================================= */
 
 function eliminarProducto(id) {
-
 
     let pedido =
         obtenerPedido();
 
 
     pedido =
-        pedido.filter(
-            producto =>
-                producto.id !== id
-        );
+        pedido.filter(function(item) {
+
+            return item.id !== id;
+
+        });
 
 
     guardarPedido(pedido);
@@ -796,13 +639,11 @@ function eliminarProducto(id) {
 }
 
 
-
-// ======================================================
-// MOSTRAR PEDIDO
-// ======================================================
+/* =========================================================
+   16. MOSTRAR PEDIDO
+   ========================================================= */
 
 function mostrarPedido() {
-
 
     const lista =
         document.getElementById(
@@ -817,47 +658,27 @@ function mostrarPedido() {
 
 
     if (!lista) {
-
         return;
-
     }
 
 
-    const pedido =
+    let pedido =
         obtenerPedido();
-
-
-    lista.innerHTML = "";
 
 
     if (pedido.length === 0) {
 
         lista.innerHTML = `
-
             <div class="pedido-vacio">
-
-                <div>
-                    🛒
-                </div>
-
-                <h2>
-                    Tu pedido está vacío
-                </h2>
-
-                <p>
-                    Agrega productos desde
-                    nuestro menú.
-                </p>
-
+                <p>🛒 Tu pedido está vacío.</p>
             </div>
-
         `;
 
 
         if (totalElemento) {
 
             totalElemento.textContent =
-                "Total: $0.00";
+                "$0.00";
 
         }
 
@@ -870,122 +691,107 @@ function mostrarPedido() {
     let total = 0;
 
 
-    pedido.forEach(
-        function(producto) {
+    lista.innerHTML = "";
 
 
-            const subtotal =
-                producto.precio *
-                producto.cantidad;
+    pedido.forEach(function(producto) {
+
+        const subtotal =
+            producto.precio *
+            producto.cantidad;
 
 
-            total += subtotal;
+        total += subtotal;
 
 
-            const elemento =
-                document.createElement(
-                    "div"
-                );
+        const elemento =
+            document.createElement("div");
 
 
-            elemento.className =
-                "producto-pedido";
+        elemento.className =
+            "producto-pedido";
 
 
-            elemento.innerHTML = `
+        elemento.innerHTML = `
 
-                <div>
-
-                    <h3>
-                        ${producto.nombre}
-                    </h3>
-
-                    <p>
-                        $${producto.precio.toFixed(2)}
-                        cada uno
-                    </p>
-
-                </div>
-
-
-                <div class="cantidad">
-
-                    <button
-                        onclick="cambiarCantidad(
-                            '${producto.id}',
-                            -1
-                        )">
-
-                        −
-
-                    </button>
-
-
-                    <strong>
-                        ${producto.cantidad}
-                    </strong>
-
-
-                    <button
-                        onclick="cambiarCantidad(
-                            '${producto.id}',
-                            1
-                        )">
-
-                        +
-
-                    </button>
-
-                </div>
-
+            <div>
 
                 <strong>
+                    ${producto.nombre}
+                </strong>
 
+                <p>
+                    $${producto.precio.toFixed(2)}
+                    cada uno
+                </p>
+
+            </div>
+
+
+            <div class="cantidad">
+
+                <button
+                    type="button"
+                    onclick="cambiarCantidad('${producto.id}', -1)">
+                    −
+                </button>
+
+
+                <span>
+                    ${producto.cantidad}
+                </span>
+
+
+                <button
+                    type="button"
+                    onclick="cambiarCantidad('${producto.id}', 1)">
+                    +
+                </button>
+
+            </div>
+
+
+            <div>
+
+                <strong>
                     $${subtotal.toFixed(2)}
-
                 </strong>
 
 
                 <button
+                    type="button"
                     class="eliminar"
-                    onclick="eliminarProducto(
-                        '${producto.id}'
-                    )">
+                    onclick="eliminarProducto('${producto.id}')">
 
-                    🗑️
+                    Eliminar
 
                 </button>
 
-            `;
+            </div>
+
+        `;
 
 
-            lista.appendChild(
-                elemento
-            );
+        lista.appendChild(elemento);
 
-
-        }
-    );
+    });
 
 
     if (totalElemento) {
 
         totalElemento.textContent =
-            "Total: $" +
-            total.toFixed(2);
+            "$" + total.toFixed(2);
 
     }
 
 }
 
 
-
-// ======================================================
-// CONTADOR DEL PEDIDO
-// ======================================================
+/* =========================================================
+   17. ACTUALIZAR CONTADOR DEL PEDIDO
+   ========================================================= */
 
 function actualizarContador() {
-
 
     const contador =
         document.getElementById(
@@ -994,9 +800,7 @@ function actualizarContador() {
 
 
     if (!contador) {
-
         return;
-
     }
 
 
@@ -1004,60 +808,38 @@ function actualizarContador() {
         obtenerPedido();
 
 
-    let cantidad = 0;
+    let cantidadTotal = 0;
 
 
-    pedido.forEach(
-        producto => {
+    pedido.forEach(function(producto) {
 
-            cantidad +=
-                producto.cantidad;
+        cantidadTotal +=
+            producto.cantidad;
 
-        }
-    );
+    });
 
 
     contador.textContent =
-        cantidad;
+        cantidadTotal;
 
 }
 
 
-
-// ======================================================
-// ENVIAR PEDIDO
-// ======================================================
+/* =========================================================
+   18. ENVIAR PEDIDO
+   ========================================================= */
 
 function enviarPedido() {
 
-
-    const pedido =
+    let pedido =
         obtenerPedido();
 
 
     if (pedido.length === 0) {
 
         alert(
-            "⚠️ Tu pedido está vacío."
+            "Tu pedido está vacío."
         );
-
-        return;
-
-    }
-
-
-    const confirmar = confirm(
-
-        "🛒 ENVIAR PEDIDO\n\n" +
-
-        "Mesa: " + mesa + "\n\n" +
-
-        "¿Deseas enviar tu pedido?"
-
-    );
-
-
-    if (!confirmar) {
 
         return;
 
@@ -1066,61 +848,82 @@ function enviarPedido() {
 
     let pedidosEnviados =
         JSON.parse(
-
             localStorage.getItem(
                 "pedidosEnviados"
             )
-
         ) || [];
 
 
-    pedidosEnviados.push({
+    let total = 0;
 
-        id: Date.now(),
+
+    pedido.forEach(function(producto) {
+
+        total +=
+            producto.precio *
+            producto.cantidad;
+
+    });
+
+
+    let nuevoPedido = {
 
         mesa: mesa,
 
         productos: pedido,
 
-        fecha:
-            new Date().toLocaleString(),
+        total: total,
 
-        estado: "Recibido"
+        fecha: new Date().toLocaleString(),
 
-    });
+        estado: "Pendiente"
+
+    };
+
+
+    pedidosEnviados.push(
+        nuevoPedido
+    );
 
 
     localStorage.setItem(
-
         "pedidosEnviados",
-
         JSON.stringify(
             pedidosEnviados
         )
-
     );
 
 
     // Vaciar carrito
 
     localStorage.removeItem(
-        "pedido"
+        "pedido_" + mesa
     );
 
 
     alert(
-
-        "✅ PEDIDO ENVIADO\n\n" +
-
-        "Mesa: " + mesa + "\n\n" +
-
-        "El restaurante ha recibido tu pedido."
-
+        "✅ ¡Pedido enviado correctamente!\n\n" +
+        "Mesa: " +
+        mesa +
+        "\nTotal: $" +
+        total.toFixed(2)
     );
 
 
-    window.location.href =
-        "index.html?mesa=" +
-        encodeURIComponent(mesa);
+    irA("index.html");
 
 }
+
+
+/* =========================================================
+   19. EJECUTAR FUNCIONES AL CARGAR
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        actualizarContador();
+
+    }
+);
