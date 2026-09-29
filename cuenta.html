@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pedir la cuenta</title>
+
+    <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+
+<body>
+
+
+<header class="encabezado">
+
+    <div class="logo">
+        🧾
+    </div>
+
+    <div>
+
+        <h1>PEDIR LA CUENTA</h1>
+
+        <p id="mesa">
+            Mesa: --
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main class="contenedor">
+
+
+    <div class="tarjeta-cuenta">
+
+
+        <div class="icono-cuenta">
+            🧾
+        </div>
+
+
+        <h2>
+            ¿Deseas solicitar la cuenta?
+        </h2>
+
+
+        <p class="texto-cuenta">
+
+            Un mesero llevará la cuenta
+            a tu mesa.
+
+        </p>
+
+
+        <button
+            class="boton-cuenta"
+            onclick="solicitarCuenta()">
+
+            🧾 Solicitar cuenta
+
+        </button>
+
+
+    </div>
+
+
+
+    <div
+        id="mensajeCuenta"
+        class="mensaje-cuenta"
+        style="display:none;">
+
+        <div class="icono-exito">
+            ✅
+        </div>
+
+        <h2>
+            Cuenta solicitada
+        </h2>
+
+        <p>
+            Un mesero se acercará
+            a tu mesa.
+        </p>
+
+    </div>
+
+
+    <br><br>
+
+
+    <button
+        class="boton"
+        onclick="irA('index.html')">
+
+        ← Regresar
+
+    </button>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Restaurante QR
+    </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurante QR</title>
+
+    <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     ENCABEZADO
+===================================== -->
+
+<header class="encabezado">
+
+    <div class="icono-restaurante">
+        🍽️
+    </div>
+
+    <h1>
+        RESTAURANTE QR
+    </h1>
+
+    <p>
+        Mesa: <span id="mesa">1</span>
+    </p>
+
+</header>
+
+
+
+<!-- =====================================
+     CONTENIDO PRINCIPAL
+===================================== -->
+
+<main class="contenedor">
+
+
+    <h2 class="subtitulo">
+        ¿Qué deseas hacer?
+    </h2>
+
+
+    <div class="opciones">
+
+
+        <!-- ===============================
+             VER MENÚ
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                📖
+            </div>
+
+            <h3 class="titulo">
+                Ver menú
+            </h3>
+
+            <p class="descripcion">
+                Consulta nuestros productos
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="irA('menu.html')">
+
+                Ver menú
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===============================
+             HACER PEDIDO
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                🛒
+            </div>
+
+            <h3 class="titulo">
+                Hacer pedido
+            </h3>
+
+            <p class="descripcion">
+                Realiza tu pedido
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="irA('pedido.html')">
+
+                Hacer pedido
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===============================
+             LLAMAR MESERO
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                🔔
+            </div>
+
+            <h3 class="titulo">
+                Llamar al mesero
+            </h3>
+
+            <p class="descripcion">
+                Solicita atención
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="llamarMesero()">
+
+                Llamar
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===============================
+             PEDIR CUENTA
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                🧾
+            </div>
+
+            <h3 class="titulo">
+                Pedir la cuenta
+            </h3>
+
+            <p class="descripcion">
+                Solicita tu cuenta
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="irA('cuenta.html')">
+
+                Pedir cuenta
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===============================
+             ASISTENCIA
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                🆘
+            </div>
+
+            <h3 class="titulo">
+                Asistencia
+            </h3>
+
+            <p class="descripcion">
+                Necesitas ayuda
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="irA('asistencia.html')">
+
+                Solicitar ayuda
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ===============================
+             FORMAS DE PAGO
+        ================================ -->
+
+        <div class="opcion">
+
+            <div class="icono">
+                💳
+            </div>
+
+            <h3 class="titulo">
+                Formas de pago
+            </h3>
+
+            <p class="descripcion">
+                Consulta las formas de pago
+            </p>
+
+            <button
+                type="button"
+                class="boton"
+                onclick="irA('pago.html')">
+
+                Ver formas de pago
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================
+     PIE DE PÁGINA
+===================================== -->
+
+<footer>
+
+    Restaurante QR
+
+</footer>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>

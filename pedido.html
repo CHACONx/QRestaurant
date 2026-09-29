@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Mi pedido</title>
+
+    <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+
+<body>
+
+
+<header class="encabezado">
+
+    <div class="logo">
+        🛒
+    </div>
+
+    <div>
+
+        <h1>MI PEDIDO</h1>
+
+        <p id="mesa">
+            Mesa: --
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main class="contenedor">
+
+
+    <h2>
+        Tu pedido
+    </h2>
+
+    <p class="subtitulo">
+        Revisa tus productos antes de enviarlo
+    </p>
+
+
+
+    <div id="listaPedido">
+
+    </div>
+
+
+
+    <div class="total-pedido">
+
+        <h2 id="total">
+            Total: $0.00
+        </h2>
+
+    </div>
+
+
+
+    <button
+        class="btn-enviar"
+        onclick="enviarPedido()">
+
+        ✅ Enviar pedido
+
+    </button>
+
+
+    <br><br>
+
+
+    <button
+        class="boton"
+        onclick="irA('menu.html')">
+
+        ← Seguir comprando
+
+    </button>
+
+
+    <br><br>
+
+
+    <button
+        class="boton"
+        onclick="irA('index.html')">
+
+        🏠 Inicio
+
+    </button>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Restaurante QR
+    </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+
+<script>
+
+    mostrarPedido();
+
+</script>
+
+
+</body>
+
+</html>

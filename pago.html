@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Formas de pago</title>
+
+    <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+
+<body>
+
+
+<header class="encabezado">
+
+    <div class="logo">
+        💳
+    </div>
+
+    <div>
+
+        <h1>FORMAS DE PAGO</h1>
+
+        <p id="mesa">
+            Mesa: --
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main class="contenedor">
+
+
+    <h2>
+        ¿Cómo deseas pagar?
+    </h2>
+
+    <p class="subtitulo">
+        Selecciona una forma de pago
+    </p>
+
+
+
+    <div class="opciones-pago">
+
+
+        <button
+            class="pago"
+            onclick="seleccionarPago('Efectivo')">
+
+            <span class="icono-pago">
+                💵
+            </span>
+
+            <span class="titulo-pago">
+                Efectivo
+            </span>
+
+            <span class="descripcion-pago">
+                Pago en efectivo
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="pago"
+            onclick="seleccionarPago('Tarjeta')">
+
+            <span class="icono-pago">
+                💳
+            </span>
+
+            <span class="titulo-pago">
+                Tarjeta
+            </span>
+
+            <span class="descripcion-pago">
+                Crédito o débito
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="pago"
+            onclick="seleccionarPago('Transferencia bancaria')">
+
+            <span class="icono-pago">
+                🏦
+            </span>
+
+            <span class="titulo-pago">
+                Transferencia
+            </span>
+
+            <span class="descripcion-pago">
+                Transferencia bancaria
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="pago"
+            onclick="seleccionarPago('Pago con QR')">
+
+            <span class="icono-pago">
+                📱
+            </span>
+
+            <span class="titulo-pago">
+                Pago con QR
+            </span>
+
+            <span class="descripcion-pago">
+                Escanea un código QR
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+
+    <div
+        id="informacionPago"
+        class="informacion-pago"
+        style="display:none;">
+
+        <h2>
+            Método seleccionado
+        </h2>
+
+        <p id="metodoSeleccionado">
+            --
+        </p>
+
+
+        <div
+            id="detallePago"
+            class="detalle-pago">
+        </div>
+
+
+        <button
+            class="boton-confirmar"
+            onclick="confirmarPago()">
+
+            ✅ Confirmar
+
+        </button>
+
+    </div>
+
+
+
+    <div
+        id="mensajePago"
+        class="mensaje-pago"
+        style="display:none;">
+
+        <div class="icono-exito">
+            ✅
+        </div>
+
+        <h2>
+            Método registrado
+        </h2>
+
+        <p>
+            El restaurante ha recibido
+            tu selección.
+        </p>
+
+    </div>
+
+
+    <br><br>
+
+
+    <button
+        class="boton"
+        onclick="irA('index.html')">
+
+        ← Regresar
+
+    </button>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Restaurante QR
+    </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Asistencia</title>
+
+    <link rel="stylesheet" href="estilo.css">
+
+</head>
+
+
+<body>
+
+
+<header class="encabezado">
+
+    <div class="logo">
+        🆘
+    </div>
+
+    <div>
+
+        <h1>ASISTENCIA</h1>
+
+        <p id="mesa">
+            Mesa: --
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main class="contenedor">
+
+
+    <h2>
+        ¿En qué podemos ayudarte?
+    </h2>
+
+    <p class="subtitulo">
+        Selecciona una opción
+    </p>
+
+
+
+    <div class="opciones-asistencia">
+
+
+        <button
+            class="opcion"
+            onclick="solicitarAyuda('Necesito cubiertos')">
+
+            <span class="icono">
+                🍴
+            </span>
+
+            <span class="titulo">
+                Necesito cubiertos
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="opcion"
+            onclick="solicitarAyuda('Necesito servilletas')">
+
+            <span class="icono">
+                🧻
+            </span>
+
+            <span class="titulo">
+                Necesito servilletas
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="opcion"
+            onclick="solicitarAyuda('Necesito al mesero')">
+
+            <span class="icono">
+                🛎️
+            </span>
+
+            <span class="titulo">
+                Necesito al mesero
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="opcion"
+            onclick="solicitarAyuda('Necesito agua')">
+
+            <span class="icono">
+                💧
+            </span>
+
+            <span class="titulo">
+                Necesito agua
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="opcion"
+            onclick="solicitarAyuda('Necesito limpiar la mesa')">
+
+            <span class="icono">
+                🧹
+            </span>
+
+            <span class="titulo">
+                Limpiar la mesa
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="opcion"
+            onclick="mostrarOtraAsistencia()">
+
+            <span class="icono">
+                💬
+            </span>
+
+            <span class="titulo">
+                Otra solicitud
+            </span>
+
+        </button>
+
+
+    </div>
+
+
+
+    <div
+        id="otraSolicitud"
+        class="otra-solicitud"
+        style="display:none;">
+
+        <h3>
+            ¿Qué necesitas?
+        </h3>
+
+        <br>
+
+        <textarea
+            id="mensajeAsistencia"
+            rows="4"
+            placeholder="Escribe tu solicitud...">
+        </textarea>
+
+        <br><br>
+
+        <button
+            class="btn-enviar"
+            onclick="enviarOtraSolicitud()">
+
+            📨 Enviar solicitud
+
+        </button>
+
+    </div>
+
+
+    <br><br>
+
+
+    <button
+        class="boton"
+        onclick="irA('index.html')">
+
+        ← Regresar
+
+    </button>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Restaurante QR
+    </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
