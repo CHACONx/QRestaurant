@@ -14,29 +14,7 @@
 
 </head>
 
-
 <body>
-
-    <script>
-
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const mesa =
-    parametros.get("mesa") ||
-    sessionStorage.getItem(
-        "clienteMesa"
-    ) ||
-    "1";
-
-document.getElementById(
-    "mesa"
-).textContent =
-    "Mesa: " + mesa;
-
-</script>
 
 <header class="encabezado">
 
@@ -56,23 +34,17 @@ document.getElementById(
 
 </header>
 
-
-
 <main class="contenedor">
 
-
     <div class="tarjeta-cuenta">
-
 
         <div class="icono-cuenta">
             🧾
         </div>
 
-
         <h2>
             ¿Deseas solicitar la cuenta?
         </h2>
-
 
         <p class="texto-cuenta">
 
@@ -80,7 +52,6 @@ document.getElementById(
             a tu mesa.
 
         </p>
-
 
         <button
             class="boton-cuenta"
@@ -90,10 +61,7 @@ document.getElementById(
 
         </button>
 
-
     </div>
-
-
 
     <div
         id="mensajeCuenta"
@@ -115,9 +83,7 @@ document.getElementById(
 
     </div>
 
-
     <br><br>
-
 
     <button
         class="boton"
@@ -127,10 +93,7 @@ document.getElementById(
 
     </button>
 
-
 </main>
-
-
 
 <footer>
 
@@ -140,12 +103,44 @@ document.getElementById(
 
 </footer>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
 
 <script src="app.js"></script>
+
+<script>
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const parametros =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const mesa =
+            parametros.get("mesa") ||
+            sessionStorage.getItem(
+                "clienteMesa"
+            ) ||
+            "1";
+
+        document.getElementById(
+            "mesa"
+        ).textContent =
+            "Mesa: " + mesa;
+
+        sessionStorage.setItem(
+            "clienteMesa",
+            mesa
+        );
+
+    }
+);
+
+</script>
 
 </body>
 
