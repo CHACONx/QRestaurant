@@ -12,11 +12,216 @@
 
     <link rel="stylesheet" href="estilo.css">
 
+    <style>
+
+        /* ================================
+           PRODUCTOS DEL PEDIDO
+        ================================= */
+
+        .producto-pedido {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            background: white;
+
+            padding: 18px;
+
+            margin-bottom: 12px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.08);
+
+        }
+
+
+        .info-pedido {
+
+            flex: 1;
+
+        }
+
+
+        .info-pedido h3 {
+
+            margin: 0 0 5px 0;
+
+        }
+
+
+        .info-pedido p {
+
+            margin: 4px 0;
+
+            color: #666;
+
+        }
+
+
+        .cantidad-pedido {
+
+            font-weight: bold;
+
+        }
+
+
+        .precio-pedido {
+
+            font-weight: bold;
+
+            font-size: 18px;
+
+        }
+
+
+        .boton-eliminar {
+
+            border: none;
+
+            background: #ef4444;
+
+            color: white;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+
+        .boton-eliminar:hover {
+
+            background: #dc2626;
+
+        }
+
+
+        .pedido-vacio {
+
+            text-align: center;
+
+            padding: 40px 20px;
+
+            background: white;
+
+            border-radius: 15px;
+
+        }
+
+
+        .pedido-vacio .emoji {
+
+            font-size: 60px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .total-pedido {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.08);
+
+        }
+
+
+        .total-pedido h2 {
+
+            margin: 0;
+
+        }
+
+
+        .btn-enviar {
+
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #16a34a;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .btn-enviar:hover {
+
+            background: #15803d;
+
+        }
+
+
+        .btn-enviar:disabled {
+
+            background: #9ca3af;
+
+            cursor: not-allowed;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .producto-pedido {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .boton-eliminar {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
+
+<!-- ======================================
+     ENCABEZADO
+====================================== -->
 
 <header class="encabezado">
 
@@ -38,12 +243,16 @@
 
 
 
-<main class="contenedor">
+<!-- ======================================
+     CONTENIDO
+====================================== -->
 
+<main class="contenedor">
 
     <h2>
         Tu pedido
     </h2>
+
 
     <p class="subtitulo">
         Revisa tus productos antes de enviarlo
@@ -51,11 +260,15 @@
 
 
 
+    <!-- PRODUCTOS -->
+
     <div id="listaPedido">
 
     </div>
 
 
+
+    <!-- TOTAL -->
 
     <div class="total-pedido">
 
@@ -67,8 +280,12 @@
 
 
 
+    <!-- ENVIAR PEDIDO -->
+
     <button
+        id="btnEnviar"
         class="btn-enviar"
+        type="button"
         onclick="enviarPedido()">
 
         ✅ Enviar pedido
@@ -76,33 +293,48 @@
     </button>
 
 
-    <br><br>
 
+    <br>
+    <br>
+
+
+
+    <!-- VOLVER AL MENÚ -->
 
     <button
         class="boton"
-        onclick="irA('menu.html')">
+        type="button"
+        onclick="irAMenu()">
 
         ← Seguir comprando
 
     </button>
 
 
-    <br><br>
 
+    <br>
+    <br>
+
+
+
+    <!-- INICIO -->
 
     <button
         class="boton"
-        onclick="irA('index.html')">
+        type="button"
+        onclick="irAInicio()">
 
         🏠 Inicio
 
     </button>
 
-
 </main>
 
 
+
+<!-- ======================================
+     PIE DE PÁGINA
+====================================== -->
 
 <footer>
 
@@ -112,13 +344,530 @@
 
 </footer>
 
+
+
+<!-- ======================================
+     SUPABASE
+====================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
 
 <script src="app.js"></script>
 
+
+
+<!-- ======================================
+     JAVASCRIPT DEL PEDIDO
+====================================== -->
+
 <script>
+
+    /* =====================================
+       OBTENER MESA
+    ===================================== */
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    let mesa =
+        parametros.get("mesa");
+
+
+    /*
+       Si no viene en la URL,
+       buscamos la mesa guardada.
+    */
+
+    if (!mesa) {
+
+        mesa =
+            sessionStorage.getItem(
+                "clienteMesa"
+            );
+
+    }
+
+
+    /*
+       Si todavía no existe,
+       usamos mesa 1.
+    */
+
+    if (!mesa) {
+
+        mesa = "1";
+
+    }
+
+
+    /*
+       Guardar nuevamente
+       la mesa actual.
+    */
+
+    sessionStorage.setItem(
+        "clienteMesa",
+        mesa
+    );
+
+
+    /*
+       Mostrar mesa.
+    */
+
+    document.getElementById(
+        "mesa"
+    ).textContent =
+        "Mesa: " + mesa;
+
+
+
+    /* =====================================
+       CLAVE DEL PEDIDO
+    ===================================== */
+
+    const clavePedido =
+        "pedido_" + mesa;
+
+
+
+    /* =====================================
+       MOSTRAR PEDIDO
+    ===================================== */
+
+    function mostrarPedido() {
+
+        const lista =
+            document.getElementById(
+                "listaPedido"
+            );
+
+
+        /*
+           Obtener pedido
+           correspondiente a esta mesa.
+        */
+
+        let pedido =
+            JSON.parse(
+                localStorage.getItem(
+                    clavePedido
+                )
+            ) || [];
+
+
+        /*
+           Limpiar lista.
+        */
+
+        lista.innerHTML = "";
+
+
+        /*
+           Si no hay productos.
+        */
+
+        if (
+            pedido.length === 0
+        ) {
+
+            lista.innerHTML = `
+
+                <div class="pedido-vacio">
+
+                    <div class="emoji">
+                        🛒
+                    </div>
+
+                    <h3>
+                        Tu pedido está vacío
+                    </h3>
+
+                    <p>
+                        Agrega productos desde el menú.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            document.getElementById(
+                "total"
+            ).textContent =
+                "Total: $0.00";
+
+
+            document.getElementById(
+                "btnEnviar"
+            ).disabled = true;
+
+
+            return;
+
+        }
+
+
+        /*
+           Activar botón enviar.
+        */
+
+        document.getElementById(
+            "btnEnviar"
+        ).disabled = false;
+
+
+        let total = 0;
+
+
+        /*
+           Mostrar productos.
+        */
+
+        pedido.forEach(
+            function(producto, indice) {
+
+                const subtotal =
+                    producto.precio *
+                    producto.cantidad;
+
+
+                total += subtotal;
+
+
+                const elemento =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                elemento.className =
+                    "producto-pedido";
+
+
+                elemento.innerHTML = `
+
+                    <div class="info-pedido">
+
+                        <h3>
+                            ${producto.nombre}
+                        </h3>
+
+                        <p>
+                            Precio:
+                            $${Number(producto.precio).toFixed(2)}
+                        </p>
+
+                        <p class="cantidad-pedido">
+                            Cantidad:
+                            ${producto.cantidad}
+                        </p>
+
+                    </div>
+
+
+                    <div class="precio-pedido">
+
+                        $${subtotal.toFixed(2)}
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        onclick="eliminarProducto(${indice})">
+
+                        Eliminar
+
+                    </button>
+
+                `;
+
+
+                lista.appendChild(
+                    elemento
+                );
+
+            }
+        );
+
+
+        /*
+           Mostrar total.
+        */
+
+        document.getElementById(
+            "total"
+        ).textContent =
+            "Total: $" +
+            total.toFixed(2);
+
+    }
+
+
+
+    /* =====================================
+       ELIMINAR PRODUCTO
+    ===================================== */
+
+    function eliminarProducto(
+        indice
+    ) {
+
+        let pedido =
+            JSON.parse(
+                localStorage.getItem(
+                    clavePedido
+                )
+            ) || [];
+
+
+        /*
+           Eliminar producto.
+        */
+
+        pedido.splice(
+            indice,
+            1
+        );
+
+
+        /*
+           Guardar cambios.
+        */
+
+        localStorage.setItem(
+            clavePedido,
+            JSON.stringify(
+                pedido
+            )
+        );
+
+
+        /*
+           Actualizar pantalla.
+        */
+
+        mostrarPedido();
+
+    }
+
+
+
+    /* =====================================
+       ENVIAR PEDIDO
+    ===================================== */
+
+    async function enviarPedido() {
+
+        let pedido =
+            JSON.parse(
+                localStorage.getItem(
+                    clavePedido
+                )
+            ) || [];
+
+
+        /*
+           Verificar pedido vacío.
+        */
+
+        if (
+            pedido.length === 0
+        ) {
+
+            alert(
+                "Tu pedido está vacío."
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Calcular total.
+        */
+
+        let total = 0;
+
+
+        pedido.forEach(
+            function(producto) {
+
+                total +=
+                    producto.precio *
+                    producto.cantidad;
+
+            }
+        );
+
+
+        /*
+           Confirmar envío.
+        */
+
+        const confirmar =
+            confirm(
+                "¿Deseas enviar el pedido de la Mesa " +
+                mesa +
+                "?\n\n" +
+                "Total: $" +
+                total.toFixed(2)
+            );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        /*
+           =================================
+           SUPABASE
+           =================================
+
+           Si Supabase está configurado,
+           intentamos guardar el pedido.
+        */
+
+        try {
+
+            /*
+               Verificar que exista
+               el cliente de Supabase.
+            */
+
+            if (
+                typeof supabase !== "undefined" &&
+                supabase
+            ) {
+
+                const { error } =
+                    await supabase
+                    .from("pedidos")
+                    .insert({
+
+                        mesa: mesa,
+
+                        pedido: pedido,
+
+                        total: total,
+
+                        estado: "pendiente"
+
+                    });
+
+
+                if (error) {
+
+                    console.error(
+                        "Error Supabase:",
+                        error
+                    );
+
+                    alert(
+                        "No se pudo enviar el pedido al restaurante."
+                    );
+
+                    return;
+
+                }
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Error:",
+                error
+            );
+
+            alert(
+                "Ocurrió un error al enviar el pedido."
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Pedido enviado correctamente.
+        */
+
+        alert(
+            "✅ Pedido enviado correctamente.\n\n" +
+            "Mesa: " +
+            mesa
+        );
+
+
+        /*
+           Vaciar solamente
+           el pedido de ESTA mesa.
+        */
+
+        localStorage.removeItem(
+            clavePedido
+        );
+
+
+        /*
+           Actualizar pantalla.
+        */
+
+        mostrarPedido();
+
+    }
+
+
+
+    /* =====================================
+       IR AL MENÚ
+    ===================================== */
+
+    function irAMenu() {
+
+        window.location.href =
+            "menu.html?mesa=" +
+            encodeURIComponent(
+                mesa
+            );
+
+    }
+
+
+
+    /* =====================================
+       IR AL INICIO
+    ===================================== */
+
+    function irAInicio() {
+
+        window.location.href =
+            "index.html?mesa=" +
+            encodeURIComponent(
+                mesa
+            );
+
+    }
+
+
+
+    /* =====================================
+       MOSTRAR AL CARGAR
+    ===================================== */
 
     mostrarPedido();
 
