@@ -1,224 +1,224 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Mi pedido</title>
+    <title>Mi pedido</title>
 
-<link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="estilo.css">
 
-<style>
+    <style>
 
-    /* ================================
-       PRODUCTOS DEL PEDIDO
-    ================================= */
-
-    .producto-pedido {
-
-        display: flex;
-
-        justify-content: space-between;
-
-        align-items: center;
-
-        gap: 15px;
-
-        background: white;
-
-        padding: 18px;
-
-        margin-bottom: 12px;
-
-        border-radius: 12px;
-
-        box-shadow:
-            0 3px 10px rgba(0,0,0,.08);
-
-    }
-
-
-    .info-pedido {
-
-        flex: 1;
-
-    }
-
-
-    .info-pedido h3 {
-
-        margin: 0 0 5px 0;
-
-    }
-
-
-    .info-pedido p {
-
-        margin: 4px 0;
-
-        color: #666;
-
-    }
-
-
-    .cantidad-pedido {
-
-        font-weight: bold;
-
-    }
-
-
-    .precio-pedido {
-
-        font-weight: bold;
-
-        font-size: 18px;
-
-    }
-
-
-    .boton-eliminar {
-
-        border: none;
-
-        background: #ef4444;
-
-        color: white;
-
-        padding: 8px 12px;
-
-        border-radius: 8px;
-
-        cursor: pointer;
-
-    }
-
-
-    .boton-eliminar:hover {
-
-        background: #dc2626;
-
-    }
-
-
-    .pedido-vacio {
-
-        text-align: center;
-
-        padding: 40px 20px;
-
-        background: white;
-
-        border-radius: 15px;
-
-    }
-
-
-    .pedido-vacio .emoji {
-
-        font-size: 60px;
-
-        margin-bottom: 15px;
-
-    }
-
-
-    .total-pedido {
-
-        margin-top: 25px;
-
-        padding: 20px;
-
-        background: white;
-
-        border-radius: 15px;
-
-        text-align: center;
-
-        box-shadow:
-            0 3px 10px rgba(0,0,0,.08);
-
-    }
-
-
-    .total-pedido h2 {
-
-        margin: 0;
-
-    }
-
-
-    .btn-enviar {
-
-        width: 100%;
-
-        margin-top: 20px;
-
-        padding: 15px;
-
-        border: none;
-
-        border-radius: 10px;
-
-        background: #16a34a;
-
-        color: white;
-
-        font-size: 18px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-    }
-
-
-    .btn-enviar:hover {
-
-        background: #15803d;
-
-    }
-
-
-    .btn-enviar:disabled {
-
-        background: #9ca3af;
-
-        cursor: not-allowed;
-
-    }
-
-
-    @media (max-width: 600px) {
+        /* ================================
+           PRODUCTOS DEL PEDIDO
+        ================================= */
 
         .producto-pedido {
 
-            flex-direction: column;
+            display: flex;
 
-            align-items: stretch;
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            background: white;
+
+            padding: 18px;
+
+            margin-bottom: 12px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.08);
 
         }
+
+
+        .info-pedido {
+
+            flex: 1;
+
+        }
+
+
+        .info-pedido h3 {
+
+            margin: 0 0 5px 0;
+
+        }
+
+
+        .info-pedido p {
+
+            margin: 4px 0;
+
+            color: #666;
+
+        }
+
+
+        .cantidad-pedido {
+
+            font-weight: bold;
+
+        }
+
+
+        .precio-pedido {
+
+            font-weight: bold;
+
+            font-size: 18px;
+
+        }
+
 
         .boton-eliminar {
 
-            width: 100%;
+            border: none;
+
+            background: #ef4444;
+
+            color: white;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
 
         }
 
-    }
 
-</style>
-```
+        .boton-eliminar:hover {
+
+            background: #dc2626;
+
+        }
+
+
+        .pedido-vacio {
+
+            text-align: center;
+
+            padding: 40px 20px;
+
+            background: white;
+
+            border-radius: 15px;
+
+        }
+
+
+        .pedido-vacio .emoji {
+
+            font-size: 60px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .total-pedido {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,.08);
+
+        }
+
+
+        .total-pedido h2 {
+
+            margin: 0;
+
+        }
+
+
+        .btn-enviar {
+
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #16a34a;
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .btn-enviar:hover {
+
+            background: #15803d;
+
+        }
+
+
+        .btn-enviar:disabled {
+
+            background: #9ca3af;
+
+            cursor: not-allowed;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .producto-pedido {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+
+            .boton-eliminar {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
+
 
 <!-- ======================================
      ENCABEZADO
@@ -226,23 +226,27 @@
 
 <header class="encabezado">
 
-```
-<div class="logo">
-    🛒
-</div>
+    <div class="logo">
+        🛒
+    </div>
 
-<div>
 
-    <h1>MI PEDIDO</h1>
+    <div>
 
-    <p id="mesa">
-        Mesa: --
-    </p>
+        <h1>
+            MI PEDIDO
+        </h1>
 
-</div>
-```
+
+        <p id="mesa">
+            Mesa: --
+        </p>
+
+    </div>
 
 </header>
+
+
 
 <!-- ======================================
      CONTENIDO
@@ -250,88 +254,100 @@
 
 <main class="contenedor">
 
-```
-<h2>
-    Tu pedido
-</h2>
 
-
-<p class="subtitulo">
-    Revisa tus productos antes de enviarlo
-</p>
-
-
-
-<!-- PRODUCTOS -->
-
-<div id="listaPedido">
-
-</div>
-
-
-
-<!-- TOTAL -->
-
-<div class="total-pedido">
-
-    <h2 id="total">
-        Total: $0.00
+    <h2>
+        Tu pedido
     </h2>
 
-</div>
+
+    <p class="subtitulo">
+        Revisa tus productos antes de enviarlo
+    </p>
 
 
 
-<!-- ENVIAR PEDIDO -->
+    <!-- =================================
+         PRODUCTOS
+    ================================== -->
 
-<button
-    id="btnEnviar"
-    class="btn-enviar"
-    type="button"
-    onclick="enviarPedido()">
+    <div id="listaPedido">
 
-    ✅ Enviar pedido
-
-</button>
+    </div>
 
 
 
-<br>
-<br>
+    <!-- =================================
+         TOTAL
+    ================================== -->
+
+    <div class="total-pedido">
+
+        <h2 id="total">
+            Total: $0.00
+        </h2>
+
+    </div>
 
 
 
-<!-- VOLVER AL MENÚ -->
+    <!-- =================================
+         ENVIAR PEDIDO
+    ================================== -->
 
-<button
-    class="boton"
-    type="button"
-    onclick="irAMenu()">
+    <button
+        id="btnEnviar"
+        class="btn-enviar"
+        type="button"
+        onclick="enviarPedido()">
 
-    ← Seguir comprando
+        ✅ Enviar pedido
 
-</button>
-
-
-
-<br>
-<br>
+    </button>
 
 
 
-<!-- INICIO -->
+    <br>
+    <br>
 
-<button
-    class="boton"
-    type="button"
-    onclick="irAInicio()">
 
-    🏠 Inicio
 
-</button>
-```
+    <!-- =================================
+         VOLVER AL MENÚ
+    ================================== -->
+
+    <button
+        class="boton"
+        type="button"
+        onclick="irAMenu()">
+
+        ← Seguir comprando
+
+    </button>
+
+
+
+    <br>
+    <br>
+
+
+
+    <!-- =================================
+         INICIO
+    ================================== -->
+
+    <button
+        class="boton"
+        type="button"
+        onclick="irAInicio()">
+
+        🏠 Inicio
+
+    </button>
+
 
 </main>
+
+
 
 <!-- ======================================
      PIE DE PÁGINA
@@ -339,13 +355,13 @@
 
 <footer>
 
-```
-<p>
-    Restaurante QR
-</p>
-```
+    <p>
+        Restaurante QR
+    </p>
 
 </footer>
+
+
 
 <!-- ======================================
      SUPABASE
@@ -355,11 +371,14 @@
 
 <script src="supabase.js"></script>
 
+
+
 <!-- ======================================
      JAVASCRIPT DEL PEDIDO
 ====================================== -->
 
 <script>
+
 
     /* =====================================
        OBTENER MESA
@@ -372,10 +391,11 @@
 
 
     /*
-       PRIMERO:
-       Obtener mesa desde la URL.
+       Primero buscamos la mesa
+       en la URL.
 
        Ejemplo:
+
        pedido.html?mesa=2
     */
 
@@ -400,7 +420,7 @@
 
     /*
        Si todavía no existe,
-       usar Mesa 1.
+       utilizar Mesa 1.
     */
 
     if (!mesa) {
@@ -454,6 +474,9 @@
 
        Mesa 3:
        pedido_3
+
+       Mesa 5:
+       pedido_5
     */
 
     const clavePedido =
@@ -467,6 +490,7 @@
 
     function mostrarPedido() {
 
+
         const lista =
             document.getElementById(
                 "listaPedido"
@@ -474,8 +498,8 @@
 
 
         /*
-           Obtener pedido
-           correspondiente a ESTA mesa.
+           Obtener pedido correspondiente
+           a ESTA mesa.
         */
 
         let pedido =
@@ -493,13 +517,15 @@
         lista.innerHTML = "";
 
 
-        /*
-           Si no hay productos.
-        */
+
+        /* =================================
+           PEDIDO VACÍO
+        ================================== */
 
         if (
             pedido.length === 0
         ) {
+
 
             lista.innerHTML = `
 
@@ -509,9 +535,11 @@
                         🛒
                     </div>
 
+
                     <h3>
                         Tu pedido está vacío
                     </h3>
+
 
                     <p>
                         Agrega productos desde el menú.
@@ -538,31 +566,39 @@
         }
 
 
-        /*
-           Activar botón enviar.
-        */
+
+        /* =================================
+           ACTIVAR BOTÓN
+        ================================== */
 
         document.getElementById(
             "btnEnviar"
         ).disabled = false;
 
 
+
         let total = 0;
 
 
-        /*
-           Mostrar productos.
-        */
+
+        /* =================================
+           MOSTRAR PRODUCTOS
+        ================================== */
 
         pedido.forEach(
             function(producto, indice) {
 
+
                 const precio =
-                    Number(producto.precio) || 0;
+                    Number(
+                        producto.precio
+                    ) || 0;
 
 
                 const cantidad =
-                    Number(producto.cantidad) || 0;
+                    Number(
+                        producto.cantidad
+                    ) || 0;
 
 
                 const subtotal =
@@ -570,6 +606,7 @@
 
 
                 total += subtotal;
+
 
 
                 const elemento =
@@ -582,22 +619,27 @@
                     "producto-pedido";
 
 
+
                 elemento.innerHTML = `
 
                     <div class="info-pedido">
 
                         <h3>
-                            ${producto.nombre}
+                            ${producto.nombre || "Producto"}
                         </h3>
+
 
                         <p>
                             Precio:
                             $${precio.toFixed(2)}
                         </p>
 
+
                         <p class="cantidad-pedido">
+
                             Cantidad:
                             ${cantidad}
+
                         </p>
 
                     </div>
@@ -630,9 +672,10 @@
         );
 
 
-        /*
-           Mostrar total.
-        */
+
+        /* =================================
+           MOSTRAR TOTAL
+        ================================== */
 
         document.getElementById(
             "total"
@@ -651,6 +694,7 @@
     function eliminarProducto(
         indice
     ) {
+
 
         let pedido =
             JSON.parse(
@@ -675,6 +719,7 @@
         }
 
 
+
         /*
            Eliminar producto.
         */
@@ -685,21 +730,24 @@
         );
 
 
+
         /*
            Si ya no quedan productos,
-           eliminar completamente
-           el pedido de esta mesa.
+           eliminar el pedido de esta mesa.
         */
 
         if (
             pedido.length === 0
         ) {
 
+
             localStorage.removeItem(
                 clavePedido
             );
 
+
         } else {
+
 
             /*
                Guardar cambios.
@@ -713,6 +761,7 @@
             );
 
         }
+
 
 
         /*
@@ -731,6 +780,7 @@
 
     async function enviarPedido() {
 
+
         /*
            Obtener pedido actual.
         */
@@ -743,6 +793,7 @@
             ) || [];
 
 
+
         /*
            Verificar pedido vacío.
         */
@@ -751,13 +802,16 @@
             pedido.length === 0
         ) {
 
+
             alert(
                 "Tu pedido está vacío."
             );
 
+
             return;
 
         }
+
 
 
         /*
@@ -770,12 +824,17 @@
         pedido.forEach(
             function(producto) {
 
+
                 const precio =
-                    Number(producto.precio) || 0;
+                    Number(
+                        producto.precio
+                    ) || 0;
 
 
                 const cantidad =
-                    Number(producto.cantidad) || 0;
+                    Number(
+                        producto.cantidad
+                    ) || 0;
 
 
                 total +=
@@ -785,17 +844,21 @@
         );
 
 
-        /*
-           Confirmar envío.
-        */
+
+        /* =================================
+           CONFIRMAR
+        ================================== */
 
         const confirmar =
             confirm(
+
                 "¿Deseas enviar el pedido de la Mesa " +
                 mesa +
                 "?\n\n" +
+
                 "Total: $" +
                 total.toFixed(2)
+
             );
 
 
@@ -806,10 +869,10 @@
         }
 
 
-        /*
-           Desactivar botón mientras
-           se envía el pedido.
-        */
+
+        /* =================================
+           DESACTIVAR BOTÓN
+        ================================== */
 
         const botonEnviar =
             document.getElementById(
@@ -831,39 +894,47 @@
 
         try {
 
+
             /*
-               Verificar que Supabase
-               esté conectado.
+               Verificar conexión.
             */
 
             if (
                 !window.supabaseClient
             ) {
 
+
                 alert(
                     "❌ Supabase no está conectado."
                 );
 
+
                 botonEnviar.disabled = false;
+
 
                 botonEnviar.textContent =
                     "✅ Enviar pedido";
+
 
                 return;
 
             }
 
 
-            /*
-               Enviar pedido a Supabase.
 
-               Se mantiene la estructura
-               de tu tabla pedidos:
-               
-               mesa
+            /*
+               ENVIAR PEDIDO A SUPABASE
+
+               IMPORTANTE:
+
+               La columna de tu tabla
+               se llama:
+
+               pedidos
+
+               NO:
+
                productos
-               total
-               estado
             */
 
             const resultado =
@@ -873,7 +944,7 @@
 
                     mesa: mesa,
 
-                    productos: pedido,
+                    pedidos: pedido,
 
                     total: total,
 
@@ -882,19 +953,22 @@
                 }]);
 
 
+
             /*
-               Obtener posible error.
+               Obtener error.
             */
 
             const error =
                 resultado.error;
 
 
+
             /*
-               Si Supabase devuelve error.
+               Si hubo error.
             */
 
             if (error) {
+
 
                 console.error(
                     "Error Supabase:",
@@ -903,30 +977,39 @@
 
 
                 alert(
+
                     "❌ No se pudo enviar el pedido al restaurante.\n\n" +
                     error.message
+
                 );
 
 
                 botonEnviar.disabled = false;
 
+
                 botonEnviar.textContent =
                     "✅ Enviar pedido";
+
 
                 return;
 
             }
 
 
-            /*
-               Pedido enviado correctamente.
-            */
+
+            /* =================================
+               PEDIDO ENVIADO
+            ================================== */
 
             alert(
+
                 "✅ Pedido enviado correctamente.\n\n" +
+
                 "Mesa: " +
                 mesa
+
             );
+
 
 
             /*
@@ -939,6 +1022,7 @@
             );
 
 
+
             /*
                Actualizar pantalla.
             */
@@ -947,7 +1031,9 @@
 
         }
 
+
         catch (error) {
+
 
             console.error(
                 "Error inesperado:",
@@ -956,12 +1042,15 @@
 
 
             alert(
+
                 "❌ Ocurrió un error al enviar el pedido.\n\n" +
                 error.message
+
             );
 
 
             botonEnviar.disabled = false;
+
 
             botonEnviar.textContent =
                 "✅ Enviar pedido";
@@ -977,6 +1066,7 @@
     ===================================== */
 
     function irAMenu() {
+
 
         window.location.href =
             "menu.html?mesa=" +
@@ -994,6 +1084,7 @@
 
     function irAInicio() {
 
+
         window.location.href =
             "index.html?mesa=" +
             encodeURIComponent(
@@ -1010,7 +1101,9 @@
 
     mostrarPedido();
 
+
 </script>
+
 
 </body>
 
