@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Panel Cocina</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    color:#111827;
+}
+
+#pedidos{
+    display:grid;
+    gap:15px;
+    margin-top:20px;
+}
+
+.tarjeta{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+}
+
+.mesa{
+    font-size:22px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+.total{
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.estado{
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.btn{
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+    margin-top:10px;
+    margin-right:5px;
+}
+
+.preparando{
+    background:#f59e0b;
+}
+
+.listo{
+    background:#16a34a;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>👨‍🍳 PANEL DE COCINA</h1>
+
+<div id="pedidos"></div>
+
+<script>
+
+async function cargarPedidos() {
+
+    const { data, error } =
+        await window.supabaseClient
+        .from("pedidos")
+        .select("*")
+        .order("created_at",
+        {
+            ascending:false
+        });
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const contenedor =
+        document.getElementById(
+            "pedidos"
+        );
+
+    contenedor.innerHTML = "";
+
+    data.forEach(pedido=>{
+
+        let productosHTML = "";
+
+        try{
+
+            pedido.productos.forEach(
+                producto=>{
+
+                    productosHTML +=
+                    `<li>${producto.nombre}</li>`;
+
+                }
+            );
+
+        }catch(error){}
+
+        contenedor.innerHTML += `
+        <div class="tarjeta">
+
+            <div class="mesa">
+                Mesa ${pedido.mesa}
+            </div>
+
+            <ul>
+                ${productosHTML}
+            </ul>
+
+            <div class="total">
+                Total: $${pedido.total}
+            </div>
+
+            <div class="estado">
+                Estado:
+                ${pedido.estado}
+            </div>
+
+            <button
+                class="btn preparando"
+                onclick="
+                actualizarEstado(
+                    '${pedido.id}',
+                    'Preparando'
+                )">
+                Preparando
+            </button>
+
+            <button
+                class="btn listo"
+                onclick="
+                actualizarEstado(
+                    '${pedido.id}',
+                    'Listo'
+                )">
+                Listo
+            </button>
+
+        </div>
+        `;
+
+    });
+
+}
+
+async function actualizarEstado(
+    id,
+    estado
+){
+
+    await window.supabaseClient
+    .from("pedidos")
+    .update({
+        estado:estado
+    })
+    .eq("id",id);
+
+    cargarPedidos();
+
+}
+
+cargarPedidos();
+
+window.supabaseClient
+.channel("pedidos-cocina")
+.on(
+    "postgres_changes",
+    {
+        event:"*",
+        schema:"public",
+        table:"pedidos"
+    },
+    ()=>{
+
+        cargarPedidos();
+
+        const audio =
+        new Audio(
+        "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+        );
+
+        audio.play();
+
+    }
+)
+.subscribe();
+
+</script>
+
+</body>
+
+</html>
