@@ -4,218 +4,706 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Panel Cocina</title>
 
+
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
+
 
 <style>
 
 body{
-    font-family: Arial, sans-serif;
+
+    font-family:Arial,sans-serif;
+
     background:#f5f5f5;
+
     margin:0;
+
     padding:20px;
+
 }
+
 
 h1{
+
     text-align:center;
+
     color:#111827;
+
 }
+
 
 #pedidos{
+
     display:grid;
+
     gap:15px;
+
     margin-top:20px;
+
 }
+
 
 .tarjeta{
+
     background:white;
+
     border-radius:15px;
+
     padding:20px;
+
     box-shadow:0 4px 15px rgba(0,0,0,.1);
+
 }
+
 
 .mesa{
+
     font-size:22px;
+
     font-weight:bold;
+
     color:#2563eb;
+
 }
+
 
 .total{
+
     font-weight:bold;
+
     margin-top:10px;
+
 }
+
 
 .estado{
+
     margin-top:10px;
+
     font-weight:bold;
+
 }
+
 
 .btn{
+
     border:none;
+
     padding:10px 15px;
+
     border-radius:8px;
+
     cursor:pointer;
+
     color:white;
+
     margin-top:10px;
+
     margin-right:5px;
+
+    font-size:14px;
+
 }
+
 
 .preparando{
+
     background:#f59e0b;
+
 }
 
+
 .listo{
+
     background:#16a34a;
+
 }
+
+
+.btn:hover{
+
+    opacity:.85;
+
+}
+
+
+.vacio{
+
+    text-align:center;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    color:#666;
+
+}
+
+
+.producto{
+
+    margin-bottom:5px;
+
+}
+
 
 </style>
 
 </head>
 
+
 <body>
 
-<h1>👨‍🍳 PANEL DE COCINA</h1>
 
-<div id="pedidos"></div>
+<h1>
+    👨‍🍳 PANEL DE COCINA
+</h1>
+
+
+<div id="pedidos">
+
+    <div class="vacio">
+        Cargando pedidos...
+    </div>
+
+</div>
+
+
 
 <script>
 
-async function cargarPedidos() {
 
-    const { data, error } =
-        await window.supabaseClient
-        .from("pedidos")
-        .select("*")
-        .order("created_at",
-        {
-            ascending:false
-        });
+// ==================================================
+// CARGAR PEDIDOS
+// ==================================================
 
-    if(error){
+async function cargarPedidos(){
 
-        console.error(error);
-        return;
+    console.log(
+        "Cargando pedidos..."
+    );
 
-    }
 
-    const contenedor =
-        document.getElementById(
-            "pedidos"
-        );
+    try{
 
-    contenedor.innerHTML = "";
 
-    data.forEach(pedido=>{
+        // ==========================================
+        // CONSULTAR SUPABASE
+        // ==========================================
 
-        let productosHTML = "";
-
-        try{
-
-            pedido.productos.forEach(
-                producto=>{
-
-                    productosHTML +=
-                    `<li>${producto.nombre}</li>`;
-
+        const resultado =
+            await window.supabaseClient
+            .from("pedidos")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
                 }
             );
 
-        }catch(error){}
 
-        contenedor.innerHTML += `
-        <div class="tarjeta">
+        const data =
+            resultado.data;
 
-            <div class="mesa">
-                Mesa ${pedido.mesa}
+
+        const error =
+            resultado.error;
+
+
+        console.log(
+            "PEDIDOS:",
+            data
+        );
+
+
+        console.log(
+            "ERROR:",
+            error
+        );
+
+
+        // ==========================================
+        // ERROR
+        // ==========================================
+
+        if(error){
+
+            console.error(
+                "Error cargando pedidos:",
+                error
+            );
+
+
+            document.getElementById(
+                "pedidos"
+            ).innerHTML = `
+
+                <div class="vacio">
+
+                    ❌ Error al cargar
+                    los pedidos.
+
+                    <br><br>
+
+                    Revisa la consola
+                    del navegador.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // CONTENEDOR
+        // ==========================================
+
+        const contenedor =
+            document.getElementById(
+                "pedidos"
+            );
+
+
+        contenedor.innerHTML = "";
+
+
+        // ==========================================
+        // SIN PEDIDOS
+        // ==========================================
+
+        if(
+            !data ||
+            data.length === 0
+        ){
+
+            contenedor.innerHTML = `
+
+                <div class="vacio">
+
+                    🍽️
+
+                    <br><br>
+
+                    No hay pedidos
+                    todavía.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // MOSTRAR PEDIDOS
+        // ==========================================
+
+        data.forEach(
+            pedido => {
+
+
+                let productosHTML = "";
+
+
+                // ==================================
+                // PRODUCTOS
+                // ==================================
+
+                if(
+                    Array.isArray(
+                        pedido.pedido
+                    )
+                ){
+
+                    pedido.pedido.forEach(
+                        producto => {
+
+                            productosHTML += `
+
+                                <li class="producto">
+
+                                    ${producto.nombre || "Producto"}
+
+                                </li>
+
+                            `;
+
+                        }
+                    );
+
+                }
+
+
+                // ==================================
+                // SI USA "PRODUCTOS"
+                // ==================================
+
+                else if(
+                    Array.isArray(
+                        pedido.productos
+                    )
+                ){
+
+                    pedido.productos.forEach(
+                        producto => {
+
+                            productosHTML += `
+
+                                <li class="producto">
+
+                                    ${producto.nombre || "Producto"}
+
+                                </li>
+
+                            `;
+
+                        }
+                    );
+
+                }
+
+
+                // ==================================
+                // ESCAPAR ID
+                // ==================================
+
+                const id =
+                    String(
+                        pedido.id
+                    ).replace(
+                        /'/g,
+                        "\\'"
+                    );
+
+
+                // ==================================
+                // ESTADO
+                // ==================================
+
+                const estado =
+                    pedido.estado ||
+                    "pendiente";
+
+
+                // ==================================
+                // TARJETA
+                // ==================================
+
+                contenedor.innerHTML += `
+
+                    <div class="tarjeta">
+
+
+                        <div class="mesa">
+
+                            Mesa ${pedido.mesa}
+
+                        </div>
+
+
+                        <br>
+
+
+                        <strong>
+                            Pedido:
+                        </strong>
+
+
+                        <ul>
+
+                            ${
+                                productosHTML ||
+                                "<li>Sin productos</li>"
+                            }
+
+                        </ul>
+
+
+                        <div class="total">
+
+                            Total:
+                            $${Number(
+                                pedido.total || 0
+                            ).toFixed(2)}
+
+                        </div>
+
+
+                        <div class="estado">
+
+                            Estado:
+                            ${estado}
+
+                        </div>
+
+
+                        <button
+
+                            class="btn preparando"
+
+                            onclick="
+                                actualizarEstado(
+                                    '${id}',
+                                    'Preparando'
+                                )
+                            ">
+
+                            👨‍🍳 Preparando
+
+                        </button>
+
+
+                        <button
+
+                            class="btn listo"
+
+                            onclick="
+                                actualizarEstado(
+                                    '${id}',
+                                    'Listo'
+                                )
+                            ">
+
+                            ✅ Listo
+
+                        </button>
+
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+    }catch(error){
+
+
+        console.error(
+            "Error:",
+            error
+        );
+
+
+        document.getElementById(
+            "pedidos"
+        ).innerHTML = `
+
+            <div class="vacio">
+
+                ❌ Ocurrió un error
+                al cargar los pedidos.
+
             </div>
 
-            <ul>
-                ${productosHTML}
-            </ul>
-
-            <div class="total">
-                Total: $${pedido.total}
-            </div>
-
-            <div class="estado">
-                Estado:
-                ${pedido.estado}
-            </div>
-
-            <button
-                class="btn preparando"
-                onclick="
-                actualizarEstado(
-                    '${pedido.id}',
-                    'Preparando'
-                )">
-                Preparando
-            </button>
-
-            <button
-                class="btn listo"
-                onclick="
-                actualizarEstado(
-                    '${pedido.id}',
-                    'Listo'
-                )">
-                Listo
-            </button>
-
-        </div>
         `;
 
-    });
+    }
 
 }
+
+
+
+// ==================================================
+// ACTUALIZAR ESTADO
+// ==================================================
 
 async function actualizarEstado(
     id,
     estado
 ){
 
-    await window.supabaseClient
-    .from("pedidos")
-    .update({
-        estado:estado
-    })
-    .eq("id",id);
+    try{
 
-    cargarPedidos();
 
-}
+        const resultado =
+            await window.supabaseClient
+            .from("pedidos")
+            .update({
 
-cargarPedidos();
+                estado:estado
 
-window.supabaseClient
-.channel("pedidos-cocina")
-.on(
-    "postgres_changes",
-    {
-        event:"*",
-        schema:"public",
-        table:"pedidos"
-    },
-    ()=>{
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+        if(
+            resultado.error
+        ){
+
+            console.error(
+                resultado.error
+            );
+
+
+            alert(
+                "No se pudo actualizar el estado."
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "Estado actualizado:",
+            estado
+        );
+
+
+        // Recargar pedidos
 
         cargarPedidos();
 
-        const audio =
-        new Audio(
-        "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+
+    }catch(error){
+
+
+        console.error(
+            error
         );
 
-        audio.play();
+
+        alert(
+            "Ocurrió un error."
+        );
 
     }
-)
-.subscribe();
+
+}
+
+
+
+// ==================================================
+// ACTUALIZACIÓN AUTOMÁTICA
+// ==================================================
+
+function activarTiempoReal(){
+
+
+    console.log(
+        "Activando tiempo real..."
+    );
+
+
+    window.supabaseClient
+
+    .channel(
+        "pedidos-cocina"
+    )
+
+    .on(
+
+        "postgres_changes",
+
+        {
+
+            event:"*",
+
+            schema:"public",
+
+            table:"pedidos"
+
+        },
+
+        payload => {
+
+
+            console.log(
+                "Cambio detectado:",
+                payload
+            );
+
+
+            // Recargar pedidos
+
+            cargarPedidos();
+
+
+            // Sonido
+
+            try{
+
+                const audio =
+                    new Audio(
+                        "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+                    );
+
+
+                audio.play().catch(
+                    error => {
+
+                        console.log(
+                            "El navegador bloqueó el sonido."
+                        );
+
+                    }
+                );
+
+
+            }catch(error){
+
+                console.log(
+                    "No se pudo reproducir sonido."
+                );
+
+            }
+
+        }
+
+    )
+
+    .subscribe(
+
+        status => {
+
+            console.log(
+                "Estado del canal:",
+                status
+            );
+
+        }
+
+    );
+
+}
+
+
+
+// ==================================================
+// INICIAR PANEL
+// ==================================================
+
+cargarPedidos();
+
+activarTiempoReal();
+
 
 </script>
+
 
 </body>
 
