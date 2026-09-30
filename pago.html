@@ -12,31 +12,215 @@
 
     <link rel="stylesheet" href="estilo.css">
 
+    <style>
+
+        /* =================================
+           OPCIONES DE PAGO
+        ================================= */
+
+        .opciones-pago {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 20px;
+
+            margin-top: 25px;
+
+        }
+
+
+        .pago {
+
+            border: none;
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 25px 20px;
+
+            cursor: pointer;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 8px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,.10);
+
+            transition:
+                transform .2s,
+                box-shadow .2s;
+
+        }
+
+
+        .pago:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,.15);
+
+        }
+
+
+        .icono-pago {
+
+            font-size: 50px;
+
+        }
+
+
+        .titulo-pago {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        .descripcion-pago {
+
+            color: #666;
+
+            font-size: 14px;
+
+        }
+
+
+
+        /* =================================
+           INFORMACIÓN DEL PAGO
+        ================================= */
+
+        .informacion-pago {
+
+            margin-top: 30px;
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,.10);
+
+            text-align: center;
+
+        }
+
+
+        #metodoSeleccionado {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            margin: 15px 0;
+
+        }
+
+
+        .detalle-pago {
+
+            margin: 20px 0;
+
+            color: #555;
+
+        }
+
+
+        .boton-confirmar {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            background: #16a34a;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .boton-confirmar:hover {
+
+            background: #15803d;
+
+        }
+
+
+
+        /* =================================
+           MENSAJE DE ÉXITO
+        ================================= */
+
+        .mensaje-pago {
+
+            margin-top: 30px;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,.10);
+
+        }
+
+
+        .icono-exito {
+
+            font-size: 60px;
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .opciones-pago {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
-    <script>
 
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const mesa =
-    parametros.get("mesa") ||
-    sessionStorage.getItem(
-        "clienteMesa"
-    ) ||
-    "1";
-
-document.getElementById(
-    "mesa"
-).textContent =
-    "Mesa: " + mesa;
-
-</script>
+<!-- ======================================
+     ENCABEZADO
+====================================== -->
 
 <header class="encabezado">
 
@@ -46,7 +230,9 @@ document.getElementById(
 
     <div>
 
-        <h1>FORMAS DE PAGO</h1>
+        <h1>
+            FORMAS DE PAGO
+        </h1>
 
         <p id="mesa">
             Mesa: 1
@@ -58,6 +244,10 @@ document.getElementById(
 
 
 
+<!-- ======================================
+     CONTENIDO
+====================================== -->
+
 <main class="contenedor">
 
 
@@ -65,16 +255,24 @@ document.getElementById(
         ¿Cómo deseas pagar?
     </h2>
 
+
     <p class="subtitulo">
         Selecciona una forma de pago
     </p>
 
 
 
+    <!-- ==================================
+         OPCIONES DE PAGO
+    =================================== -->
+
     <div class="opciones-pago">
 
 
+        <!-- EFECTIVO -->
+
         <button
+            type="button"
             class="pago"
             onclick="seleccionarPago('Efectivo')">
 
@@ -94,7 +292,10 @@ document.getElementById(
 
 
 
+        <!-- TARJETA -->
+
         <button
+            type="button"
             class="pago"
             onclick="seleccionarPago('Tarjeta')">
 
@@ -114,7 +315,10 @@ document.getElementById(
 
 
 
+        <!-- TRANSFERENCIA -->
+
         <button
+            type="button"
             class="pago"
             onclick="seleccionarPago('Transferencia bancaria')">
 
@@ -127,16 +331,19 @@ document.getElementById(
             </span>
 
             <span class="descripcion-pago">
-                Escanea un código QR
+                Transferencia bancaria
             </span>
 
         </button>
 
 
-
     </div>
 
 
+
+    <!-- ==================================
+         INFORMACIÓN DEL PAGO
+    =================================== -->
 
     <div
         id="informacionPago"
@@ -146,6 +353,7 @@ document.getElementById(
         <h2>
             Método seleccionado
         </h2>
+
 
         <p id="metodoSeleccionado">
             --
@@ -159,6 +367,7 @@ document.getElementById(
 
 
         <button
+            type="button"
             class="boton-confirmar"
             onclick="confirmarPago()">
 
@@ -169,6 +378,10 @@ document.getElementById(
     </div>
 
 
+
+    <!-- ==================================
+         MENSAJE FINAL
+    =================================== -->
 
     <div
         id="mensajePago"
@@ -188,15 +401,28 @@ document.getElementById(
             tu selección.
         </p>
 
+        <p>
+            Mesa:
+            <strong id="mesaConfirmacion"></strong>
+        </p>
+
     </div>
 
 
-    <br><br>
 
+    <br>
+    <br>
+
+
+
+    <!-- ==================================
+         REGRESAR
+    =================================== -->
 
     <button
+        type="button"
         class="boton"
-        onclick="irA('index.html')">
+        onclick="irAInicio()">
 
         ← Regresar
 
@@ -207,6 +433,10 @@ document.getElementById(
 
 
 
+<!-- ======================================
+     FOOTER
+====================================== -->
+
 <footer>
 
     <p>
@@ -216,11 +446,360 @@ document.getElementById(
 </footer>
 
 
+
+<!-- ======================================
+     SUPABASE
+====================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
 
-<script src="app.js"></script>
+
+
+<!-- ======================================
+     JAVASCRIPT
+====================================== -->
+
+<script>
+
+    /* =====================================
+       OBTENER MESA
+    ===================================== */
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    let mesa =
+        parametros.get("mesa");
+
+
+    /*
+       Si no viene en la URL,
+       buscar en sessionStorage.
+    */
+
+    if (!mesa) {
+
+        mesa =
+            sessionStorage.getItem(
+                "clienteMesa"
+            );
+
+    }
+
+
+    /*
+       Si todavía no existe,
+       usar Mesa 1.
+    */
+
+    if (!mesa) {
+
+        mesa = "1";
+
+    }
+
+
+    /*
+       Guardar la mesa actual.
+    */
+
+    sessionStorage.setItem(
+        "clienteMesa",
+        mesa
+    );
+
+
+    /*
+       Mostrar la mesa.
+    */
+
+    document.getElementById(
+        "mesa"
+    ).textContent =
+        "Mesa: " + mesa;
+
+
+
+    /* =====================================
+       MÉTODO DE PAGO
+    ===================================== */
+
+    let metodoPago = null;
+
+
+
+    /* =====================================
+       SELECCIONAR PAGO
+    ===================================== */
+
+    function seleccionarPago(
+        metodo
+    ) {
+
+        metodoPago = metodo;
+
+
+        document.getElementById(
+            "metodoSeleccionado"
+        ).textContent =
+            metodo;
+
+
+        const detalle =
+            document.getElementById(
+                "detallePago"
+            );
+
+
+        /* EFECTIVO */
+
+        if (
+            metodo === "Efectivo"
+        ) {
+
+            detalle.innerHTML = `
+
+                <p>
+                    💵 Seleccionaste
+                    <strong>pago en efectivo</strong>.
+                </p>
+
+                <p>
+                    Realizarás el pago
+                    directamente en el restaurante.
+                </p>
+
+            `;
+
+        }
+
+
+        /* TARJETA */
+
+        else if (
+            metodo === "Tarjeta"
+        ) {
+
+            detalle.innerHTML = `
+
+                <p>
+                    💳 Seleccionaste
+                    <strong>pago con tarjeta</strong>.
+                </p>
+
+                <p>
+                    Podrás pagar con tarjeta
+                    en el restaurante.
+                </p>
+
+            `;
+
+        }
+
+
+        /* TRANSFERENCIA */
+
+        else if (
+            metodo === "Transferencia bancaria"
+        ) {
+
+            detalle.innerHTML = `
+
+                <p>
+                    🏦 Seleccionaste
+                    <strong>transferencia bancaria</strong>.
+                </p>
+
+                <p>
+                    El restaurante te proporcionará
+                    los datos para realizar el pago.
+                </p>
+
+            `;
+
+        }
+
+
+        /*
+           Mostrar información.
+        */
+
+        document.getElementById(
+            "informacionPago"
+        ).style.display =
+            "block";
+
+
+        /*
+           Ocultar mensaje anterior.
+        */
+
+        document.getElementById(
+            "mensajePago"
+        ).style.display =
+            "none";
+
+
+        /*
+           Desplazarse hacia la información.
+        */
+
+        document.getElementById(
+            "informacionPago"
+        ).scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+
+
+
+    /* =====================================
+       CONFIRMAR PAGO
+    ===================================== */
+
+    async function confirmarPago() {
+
+        if (!metodoPago) {
+
+            alert(
+                "Selecciona una forma de pago."
+            );
+
+            return;
+
+        }
+
+
+        /*
+           =================================
+           GUARDAR EN SUPABASE
+           =================================
+        */
+
+        try {
+
+            if (
+                typeof supabase !== "undefined" &&
+                supabase
+            ) {
+
+                const resultado =
+                    await supabase
+                    .from("pagos")
+                    .insert({
+
+                        mesa: mesa,
+
+                        metodo_pago:
+                            metodoPago,
+
+                        estado:
+                            "pendiente"
+
+                    });
+
+
+                if (
+                    resultado.error
+                ) {
+
+                    console.error(
+                        resultado.error
+                    );
+
+                    alert(
+                        "No se pudo registrar el pago."
+                    );
+
+                    return;
+
+                }
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+            alert(
+                "Ocurrió un error al registrar el pago."
+            );
+
+            return;
+
+        }
+
+
+        /*
+           Ocultar selección.
+        */
+
+        document.getElementById(
+            "informacionPago"
+        ).style.display =
+            "none";
+
+
+        /*
+           Mostrar confirmación.
+        */
+
+        document.getElementById(
+            "mensajePago"
+        ).style.display =
+            "block";
+
+
+        /*
+           Mostrar mesa.
+        */
+
+        document.getElementById(
+            "mesaConfirmacion"
+        ).textContent =
+            mesa;
+
+
+        /*
+           Mostrar mensaje.
+        */
+
+        document.getElementById(
+            "mensajePago"
+        ).scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
+
+
+
+    /* =====================================
+       REGRESAR AL INICIO
+    ===================================== */
+
+    function irAInicio() {
+
+        window.location.href =
+            "index.html?mesa=" +
+            encodeURIComponent(
+                mesa
+            );
+
+    }
+
+</script>
+
 
 </body>
 
