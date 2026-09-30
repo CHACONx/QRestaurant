@@ -12,152 +12,87 @@
 
 
 <!-- SUPABASE -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
 
 
 <style>
 
 body{
-
     font-family:Arial,sans-serif;
-
     background:#f5f5f5;
-
     margin:0;
-
     padding:20px;
-
 }
-
 
 h1{
-
     text-align:center;
-
     color:#111827;
-
 }
-
 
 #pedidos{
-
     display:grid;
-
     gap:15px;
-
     margin-top:20px;
-
 }
-
 
 .tarjeta{
-
     background:white;
-
     border-radius:15px;
-
     padding:20px;
-
     box-shadow:0 4px 15px rgba(0,0,0,.1);
-
 }
-
 
 .mesa{
-
     font-size:22px;
-
     font-weight:bold;
-
     color:#2563eb;
-
 }
-
 
 .total{
-
     font-weight:bold;
-
     margin-top:10px;
-
 }
-
 
 .estado{
-
     margin-top:10px;
-
     font-weight:bold;
-
 }
-
 
 .btn{
-
     border:none;
-
     padding:10px 15px;
-
     border-radius:8px;
-
     cursor:pointer;
-
     color:white;
-
     margin-top:10px;
-
     margin-right:5px;
-
     font-size:14px;
-
 }
-
 
 .preparando{
-
     background:#f59e0b;
-
 }
-
 
 .listo{
-
     background:#16a34a;
-
 }
-
 
 .btn:hover{
-
     opacity:.85;
-
 }
-
 
 .vacio{
-
     text-align:center;
-
     background:white;
-
     padding:30px;
-
     border-radius:15px;
-
     color:#666;
-
 }
-
 
 .producto{
-
     margin-bottom:5px;
-
 }
-
 
 </style>
 
@@ -186,21 +121,30 @@ h1{
 
 
 // ==================================================
+// VERIFICAR SUPABASE
+// ==================================================
+
+console.log("Panel de cocina iniciado.");
+
+console.log(
+    "Supabase:",
+    window.supabaseClient
+);
+
+
+// ==================================================
 // CARGAR PEDIDOS
 // ==================================================
 
 async function cargarPedidos(){
 
-    console.log(
-        "Cargando pedidos..."
-    );
+    console.log("Cargando pedidos...");
 
 
     try{
 
-
         // ==========================================
-        // CONSULTAR SUPABASE
+        // CONSULTAR PEDIDOS
         // ==========================================
 
         const resultado =
@@ -217,7 +161,6 @@ async function cargarPedidos(){
 
         const data =
             resultado.data;
-
 
         const error =
             resultado.error;
@@ -258,8 +201,7 @@ async function cargarPedidos(){
 
                     <br><br>
 
-                    Revisa la consola
-                    del navegador.
+                    ${error.message || ""}
 
                 </div>
 
@@ -284,7 +226,7 @@ async function cargarPedidos(){
 
 
         // ==========================================
-        // SIN PEDIDOS
+        // NO HAY PEDIDOS
         // ==========================================
 
         if(
@@ -324,7 +266,7 @@ async function cargarPedidos(){
 
 
                 // ==================================
-                // PRODUCTOS
+                // SI LA COLUMNA ES "pedido"
                 // ==================================
 
                 if(
@@ -353,7 +295,7 @@ async function cargarPedidos(){
 
 
                 // ==================================
-                // SI USA "PRODUCTOS"
+                // SI LA COLUMNA ES "productos"
                 // ==================================
 
                 else if(
@@ -382,7 +324,16 @@ async function cargarPedidos(){
 
 
                 // ==================================
-                // ESCAPAR ID
+                // ESTADO
+                // ==================================
+
+                const estado =
+                    pedido.estado ||
+                    "pendiente";
+
+
+                // ==================================
+                // ID
                 // ==================================
 
                 const id =
@@ -392,15 +343,6 @@ async function cargarPedidos(){
                         /'/g,
                         "\\'"
                     );
-
-
-                // ==================================
-                // ESTADO
-                // ==================================
-
-                const estado =
-                    pedido.estado ||
-                    "pendiente";
 
 
                 // ==================================
@@ -456,9 +398,7 @@ async function cargarPedidos(){
 
 
                         <button
-
                             class="btn preparando"
-
                             onclick="
                                 actualizarEstado(
                                     '${id}',
@@ -472,9 +412,7 @@ async function cargarPedidos(){
 
 
                         <button
-
                             class="btn listo"
-
                             onclick="
                                 actualizarEstado(
                                     '${id}',
@@ -499,7 +437,7 @@ async function cargarPedidos(){
 
 
         console.error(
-            "Error:",
+            "Error inesperado:",
             error
         );
 
@@ -532,8 +470,14 @@ async function actualizarEstado(
     estado
 ){
 
-    try{
+    console.log(
+        "Actualizando:",
+        id,
+        estado
+    );
 
+
+    try{
 
         const resultado =
             await window.supabaseClient
@@ -562,25 +506,22 @@ async function actualizarEstado(
                 "No se pudo actualizar el estado."
             );
 
-
             return;
 
         }
 
 
         console.log(
-            "Estado actualizado:",
-            estado
+            "Estado actualizado correctamente."
         );
 
 
-        // Recargar pedidos
+        // Volver a cargar pedidos
 
         cargarPedidos();
 
 
     }catch(error){
-
 
         console.error(
             error
@@ -588,7 +529,7 @@ async function actualizarEstado(
 
 
         alert(
-            "Ocurrió un error."
+            "Ocurrió un error al actualizar."
         );
 
     }
@@ -598,11 +539,10 @@ async function actualizarEstado(
 
 
 // ==================================================
-// ACTUALIZACIÓN AUTOMÁTICA
+// TIEMPO REAL
 // ==================================================
 
 function activarTiempoReal(){
-
 
     console.log(
         "Activando tiempo real..."
@@ -643,7 +583,7 @@ function activarTiempoReal(){
             cargarPedidos();
 
 
-            // Sonido
+            // Intentar reproducir sonido
 
             try{
 
@@ -654,7 +594,7 @@ function activarTiempoReal(){
 
 
                 audio.play().catch(
-                    error => {
+                    () => {
 
                         console.log(
                             "El navegador bloqueó el sonido."
@@ -667,7 +607,7 @@ function activarTiempoReal(){
             }catch(error){
 
                 console.log(
-                    "No se pudo reproducir sonido."
+                    "No se pudo reproducir el sonido."
                 );
 
             }
@@ -694,7 +634,7 @@ function activarTiempoReal(){
 
 
 // ==================================================
-// INICIAR PANEL
+// INICIAR
 // ==================================================
 
 cargarPedidos();
