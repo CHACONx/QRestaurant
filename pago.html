@@ -17,6 +17,26 @@
 
 <body>
 
+    <script>
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const mesa =
+    parametros.get("mesa") ||
+    sessionStorage.getItem(
+        "clienteMesa"
+    ) ||
+    "1";
+
+document.getElementById(
+    "mesa"
+).textContent =
+    "Mesa: " + mesa;
+
+</script>
 
 <header class="encabezado">
 
