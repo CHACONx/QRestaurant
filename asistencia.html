@@ -17,30 +17,6 @@
 
 <body>
 
-<script>
-
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const mesa =
-    parametros.get("mesa") ||
-    sessionStorage.getItem(
-        "clienteMesa"
-    ) ||
-    "1";
-
-document.getElementById(
-    "mesa"
-).textContent = mesa;
-
-sessionStorage.setItem(
-    "clienteMesa",
-    mesa
-);
-
-</script>
 
 <header class="encabezado">
 
@@ -52,10 +28,10 @@ sessionStorage.setItem(
 
         <h1>ASISTENCIA</h1>
 
-    <p>
-        Mesa:
-        <span id="mesa"> </span>
-    </p>
+        <p>
+            Mesa:
+            <span id="mesa"></span>
+        </p>
 
     </div>
 
@@ -213,7 +189,7 @@ sessionStorage.setItem(
 
     <button
         class="boton"
-        onclick="irA('index.html')">
+        onclick="irAInicio()">
 
         ← Regresar
 
@@ -233,11 +209,304 @@ sessionStorage.setItem(
 </footer>
 
 
+
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
 
-<script src="app.js"></script>
+
+
+<script>
+
+
+// ========================================
+// OBTENER LA MESA CORRECTA
+// ========================================
+
+const parametros = new URLSearchParams(
+    window.location.search
+);
+
+let mesa = parametros.get("mesa");
+
+
+// Si no viene en la URL,
+// buscamos la mesa guardada
+
+if (!mesa) {
+
+    mesa = sessionStorage.getItem(
+        "clienteMesa"
+    );
+
+}
+
+
+// Si todavía no existe,
+// usamos mesa 1 como último recurso
+
+if (!mesa) {
+
+    mesa = "1";
+
+}
+
+
+// Guardamos la mesa actual
+
+sessionStorage.setItem(
+    "clienteMesa",
+    mesa
+);
+
+
+// Mostrar la mesa
+
+document.getElementById(
+    "mesa"
+).textContent = mesa;
+
+
+
+// ========================================
+// SOLICITAR AYUDA
+// ========================================
+
+async function solicitarAyuda(mensaje) {
+
+    const confirmacion = confirm(
+        "¿Deseas solicitar:\n\n" +
+        mensaje +
+        "\n\nMesa: " +
+        mesa +
+        "?"
+    );
+
+
+    if (!confirmacion) {
+
+        return;
+
+    }
+
+
+    try {
+
+        // Intentar guardar en Supabase
+
+        if (
+            typeof supabase !== "undefined" &&
+            supabase
+        ) {
+
+            const { error } = await supabase
+                .from("asistencias")
+                .insert([
+
+                    {
+                        mesa: mesa,
+                        mensaje: mensaje,
+                        estado: "pendiente"
+                    }
+
+                ]);
+
+
+            if (error) {
+
+                console.error(
+                    "Error de Supabase:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        alert(
+            "Solicitud enviada correctamente.\n\n" +
+            "Mesa: " +
+            mesa +
+            "\n" +
+            mensaje
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "La solicitud fue registrada.\n\n" +
+            "Mesa: " +
+            mesa +
+            "\n" +
+            mensaje
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// MOSTRAR OTRA SOLICITUD
+// ========================================
+
+function mostrarOtraAsistencia() {
+
+    const formulario =
+        document.getElementById(
+            "otraSolicitud"
+        );
+
+
+    if (
+        formulario.style.display === "none" ||
+        formulario.style.display === ""
+    ) {
+
+        formulario.style.display = "block";
+
+    } else {
+
+        formulario.style.display = "none";
+
+    }
+
+}
+
+
+
+// ========================================
+// ENVIAR OTRA SOLICITUD
+// ========================================
+
+async function enviarOtraSolicitud() {
+
+    const textarea =
+        document.getElementById(
+            "mensajeAsistencia"
+        );
+
+
+    const mensaje =
+        textarea.value.trim();
+
+
+    if (!mensaje) {
+
+        alert(
+            "Por favor escribe tu solicitud."
+        );
+
+        return;
+
+    }
+
+
+    const confirmacion = confirm(
+        "¿Deseas enviar esta solicitud?\n\n" +
+        mensaje +
+        "\n\nMesa: " +
+        mesa +
+        "?"
+    );
+
+
+    if (!confirmacion) {
+
+        return;
+
+    }
+
+
+    try {
+
+        // Guardar en Supabase
+
+        if (
+            typeof supabase !== "undefined" &&
+            supabase
+        ) {
+
+            const { error } = await supabase
+                .from("asistencias")
+                .insert([
+
+                    {
+                        mesa: mesa,
+                        mensaje: mensaje,
+                        estado: "pendiente"
+                    }
+
+                ]);
+
+
+            if (error) {
+
+                console.error(
+                    "Error de Supabase:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        alert(
+            "Solicitud enviada correctamente.\n\n" +
+            "Mesa: " +
+            mesa
+        );
+
+
+        textarea.value = "";
+
+
+        document.getElementById(
+            "otraSolicitud"
+        ).style.display = "none";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Solicitud enviada.\n\n" +
+            "Mesa: " +
+            mesa
+        );
+
+    }
+
+}
+
+
+
+// ========================================
+// REGRESAR AL INICIO
+// ========================================
+
+function irAInicio() {
+
+    window.location.href =
+        "index.html?mesa=" +
+        encodeURIComponent(mesa);
+
+}
+
+
+</script>
+
 
 </body>
 
