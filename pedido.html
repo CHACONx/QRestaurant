@@ -1,223 +1,224 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>Mi pedido</title>
+<title>Mi pedido</title>
 
-    <link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="estilo.css">
 
-    <style>
+<style>
 
-        /* ================================
-           PRODUCTOS DEL PEDIDO
-        ================================= */
+    /* ================================
+       PRODUCTOS DEL PEDIDO
+    ================================= */
+
+    .producto-pedido {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 15px;
+
+        background: white;
+
+        padding: 18px;
+
+        margin-bottom: 12px;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 10px rgba(0,0,0,.08);
+
+    }
+
+
+    .info-pedido {
+
+        flex: 1;
+
+    }
+
+
+    .info-pedido h3 {
+
+        margin: 0 0 5px 0;
+
+    }
+
+
+    .info-pedido p {
+
+        margin: 4px 0;
+
+        color: #666;
+
+    }
+
+
+    .cantidad-pedido {
+
+        font-weight: bold;
+
+    }
+
+
+    .precio-pedido {
+
+        font-weight: bold;
+
+        font-size: 18px;
+
+    }
+
+
+    .boton-eliminar {
+
+        border: none;
+
+        background: #ef4444;
+
+        color: white;
+
+        padding: 8px 12px;
+
+        border-radius: 8px;
+
+        cursor: pointer;
+
+    }
+
+
+    .boton-eliminar:hover {
+
+        background: #dc2626;
+
+    }
+
+
+    .pedido-vacio {
+
+        text-align: center;
+
+        padding: 40px 20px;
+
+        background: white;
+
+        border-radius: 15px;
+
+    }
+
+
+    .pedido-vacio .emoji {
+
+        font-size: 60px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .total-pedido {
+
+        margin-top: 25px;
+
+        padding: 20px;
+
+        background: white;
+
+        border-radius: 15px;
+
+        text-align: center;
+
+        box-shadow:
+            0 3px 10px rgba(0,0,0,.08);
+
+    }
+
+
+    .total-pedido h2 {
+
+        margin: 0;
+
+    }
+
+
+    .btn-enviar {
+
+        width: 100%;
+
+        margin-top: 20px;
+
+        padding: 15px;
+
+        border: none;
+
+        border-radius: 10px;
+
+        background: #16a34a;
+
+        color: white;
+
+        font-size: 18px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+    }
+
+
+    .btn-enviar:hover {
+
+        background: #15803d;
+
+    }
+
+
+    .btn-enviar:disabled {
+
+        background: #9ca3af;
+
+        cursor: not-allowed;
+
+    }
+
+
+    @media (max-width: 600px) {
 
         .producto-pedido {
 
-            display: flex;
+            flex-direction: column;
 
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 15px;
-
-            background: white;
-
-            padding: 18px;
-
-            margin-bottom: 12px;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 3px 10px rgba(0,0,0,.08);
+            align-items: stretch;
 
         }
-
-
-        .info-pedido {
-
-            flex: 1;
-
-        }
-
-
-        .info-pedido h3 {
-
-            margin: 0 0 5px 0;
-
-        }
-
-
-        .info-pedido p {
-
-            margin: 4px 0;
-
-            color: #666;
-
-        }
-
-
-        .cantidad-pedido {
-
-            font-weight: bold;
-
-        }
-
-
-        .precio-pedido {
-
-            font-weight: bold;
-
-            font-size: 18px;
-
-        }
-
 
         .boton-eliminar {
 
-            border: none;
-
-            background: #ef4444;
-
-            color: white;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-        }
-
-
-        .boton-eliminar:hover {
-
-            background: #dc2626;
-
-        }
-
-
-        .pedido-vacio {
-
-            text-align: center;
-
-            padding: 40px 20px;
-
-            background: white;
-
-            border-radius: 15px;
-
-        }
-
-
-        .pedido-vacio .emoji {
-
-            font-size: 60px;
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .total-pedido {
-
-            margin-top: 25px;
-
-            padding: 20px;
-
-            background: white;
-
-            border-radius: 15px;
-
-            text-align: center;
-
-            box-shadow:
-                0 3px 10px rgba(0,0,0,.08);
-
-        }
-
-
-        .total-pedido h2 {
-
-            margin: 0;
-
-        }
-
-
-        .btn-enviar {
-
             width: 100%;
 
-            margin-top: 20px;
-
-            padding: 15px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            background: #16a34a;
-
-            color: white;
-
-            font-size: 18px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
         }
 
+    }
 
-        .btn-enviar:hover {
-
-            background: #15803d;
-
-        }
-
-
-        .btn-enviar:disabled {
-
-            background: #9ca3af;
-
-            cursor: not-allowed;
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .producto-pedido {
-
-                flex-direction: column;
-
-                align-items: stretch;
-
-            }
-
-            .boton-eliminar {
-
-                width: 100%;
-
-            }
-
-        }
-
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
-
 
 <!-- ======================================
      ENCABEZADO
@@ -225,23 +226,23 @@
 
 <header class="encabezado">
 
-    <div class="logo">
-        🛒
-    </div>
+```
+<div class="logo">
+    🛒
+</div>
 
-    <div>
+<div>
 
-        <h1>MI PEDIDO</h1>
+    <h1>MI PEDIDO</h1>
 
-        <p id="mesa">
-            Mesa: 1
-        </p>
+    <p id="mesa">
+        Mesa: --
+    </p>
 
-    </div>
+</div>
+```
 
 </header>
-
-
 
 <!-- ======================================
      CONTENIDO
@@ -249,88 +250,88 @@
 
 <main class="contenedor">
 
-    <h2>
-        Tu pedido
+```
+<h2>
+    Tu pedido
+</h2>
+
+
+<p class="subtitulo">
+    Revisa tus productos antes de enviarlo
+</p>
+
+
+
+<!-- PRODUCTOS -->
+
+<div id="listaPedido">
+
+</div>
+
+
+
+<!-- TOTAL -->
+
+<div class="total-pedido">
+
+    <h2 id="total">
+        Total: $0.00
     </h2>
 
-
-    <p class="subtitulo">
-        Revisa tus productos antes de enviarlo
-    </p>
+</div>
 
 
 
-    <!-- PRODUCTOS -->
+<!-- ENVIAR PEDIDO -->
 
-    <div id="listaPedido">
+<button
+    id="btnEnviar"
+    class="btn-enviar"
+    type="button"
+    onclick="enviarPedido()">
 
-    </div>
+    ✅ Enviar pedido
 
-
-
-    <!-- TOTAL -->
-
-    <div class="total-pedido">
-
-        <h2 id="total">
-            Total: $0.00
-        </h2>
-
-    </div>
+</button>
 
 
 
-    <!-- ENVIAR PEDIDO -->
-
-    <button
-        id="btnEnviar"
-        class="btn-enviar"
-        type="button"
-        onclick="enviarPedido()">
-
-        ✅ Enviar pedido
-
-    </button>
+<br>
+<br>
 
 
 
-    <br>
-    <br>
+<!-- VOLVER AL MENÚ -->
+
+<button
+    class="boton"
+    type="button"
+    onclick="irAMenu()">
+
+    ← Seguir comprando
+
+</button>
 
 
 
-    <!-- VOLVER AL MENÚ -->
-
-    <button
-        class="boton"
-        type="button"
-        onclick="irAMenu()">
-
-        ← Seguir comprando
-
-    </button>
+<br>
+<br>
 
 
 
-    <br>
-    <br>
+<!-- INICIO -->
 
+<button
+    class="boton"
+    type="button"
+    onclick="irAInicio()">
 
+    🏠 Inicio
 
-    <!-- INICIO -->
-
-    <button
-        class="boton"
-        type="button"
-        onclick="irAInicio()">
-
-        🏠 Inicio
-
-    </button>
+</button>
+```
 
 </main>
-
-
 
 <!-- ======================================
      PIE DE PÁGINA
@@ -338,13 +339,13 @@
 
 <footer>
 
-    <p>
-        Restaurante QR
-    </p>
+```
+<p>
+    Restaurante QR
+</p>
+```
 
 </footer>
-
-
 
 <!-- ======================================
      SUPABASE
@@ -353,10 +354,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase.js"></script>
-
-<script src="app.js"></script>
-
-
 
 <!-- ======================================
      JAVASCRIPT DEL PEDIDO
@@ -374,13 +371,21 @@
         );
 
 
+    /*
+       PRIMERO:
+       Obtener mesa desde la URL.
+
+       Ejemplo:
+       pedido.html?mesa=2
+    */
+
     let mesa =
         parametros.get("mesa");
 
 
     /*
-       Si no viene en la URL,
-       buscamos la mesa guardada.
+       Si no existe en la URL,
+       buscar en sessionStorage.
     */
 
     if (!mesa) {
@@ -395,7 +400,7 @@
 
     /*
        Si todavía no existe,
-       usamos mesa 1.
+       usar Mesa 1.
     */
 
     if (!mesa) {
@@ -406,8 +411,15 @@
 
 
     /*
-       Guardar nuevamente
-       la mesa actual.
+       Limpiar espacios.
+    */
+
+    mesa =
+        String(mesa).trim();
+
+
+    /*
+       Guardar la mesa actual.
     */
 
     sessionStorage.setItem(
@@ -431,6 +443,19 @@
        CLAVE DEL PEDIDO
     ===================================== */
 
+    /*
+       Cada mesa tiene su propio pedido.
+
+       Mesa 1:
+       pedido_1
+
+       Mesa 2:
+       pedido_2
+
+       Mesa 3:
+       pedido_3
+    */
+
     const clavePedido =
         "pedido_" + mesa;
 
@@ -450,7 +475,7 @@
 
         /*
            Obtener pedido
-           correspondiente a esta mesa.
+           correspondiente a ESTA mesa.
         */
 
         let pedido =
@@ -532,9 +557,16 @@
         pedido.forEach(
             function(producto, indice) {
 
+                const precio =
+                    Number(producto.precio) || 0;
+
+
+                const cantidad =
+                    Number(producto.cantidad) || 0;
+
+
                 const subtotal =
-                    producto.precio *
-                    producto.cantidad;
+                    precio * cantidad;
 
 
                 total += subtotal;
@@ -560,12 +592,12 @@
 
                         <p>
                             Precio:
-                            $${Number(producto.precio).toFixed(2)}
+                            $${precio.toFixed(2)}
                         </p>
 
                         <p class="cantidad-pedido">
                             Cantidad:
-                            ${producto.cantidad}
+                            ${cantidad}
                         </p>
 
                     </div>
@@ -629,6 +661,21 @@
 
 
         /*
+           Verificar que exista
+           el producto.
+        */
+
+        if (
+            indice < 0 ||
+            indice >= pedido.length
+        ) {
+
+            return;
+
+        }
+
+
+        /*
            Eliminar producto.
         */
 
@@ -639,15 +686,33 @@
 
 
         /*
-           Guardar cambios.
+           Si ya no quedan productos,
+           eliminar completamente
+           el pedido de esta mesa.
         */
 
-        localStorage.setItem(
-            clavePedido,
-            JSON.stringify(
-                pedido
-            )
-        );
+        if (
+            pedido.length === 0
+        ) {
+
+            localStorage.removeItem(
+                clavePedido
+            );
+
+        } else {
+
+            /*
+               Guardar cambios.
+            */
+
+            localStorage.setItem(
+                clavePedido,
+                JSON.stringify(
+                    pedido
+                )
+            );
+
+        }
 
 
         /*
@@ -665,6 +730,10 @@
     ===================================== */
 
     async function enviarPedido() {
+
+        /*
+           Obtener pedido actual.
+        */
 
         let pedido =
             JSON.parse(
@@ -701,9 +770,16 @@
         pedido.forEach(
             function(producto) {
 
+                const precio =
+                    Number(producto.precio) || 0;
+
+
+                const cantidad =
+                    Number(producto.cantidad) || 0;
+
+
                 total +=
-                    producto.precio *
-                    producto.cantidad;
+                    precio * cantidad;
 
             }
         );
@@ -731,103 +807,166 @@
 
 
         /*
-           =================================
-           SUPABASE
-           =================================
-
-           Si Supabase está configurado,
-           intentamos guardar el pedido.
+           Desactivar botón mientras
+           se envía el pedido.
         */
+
+        const botonEnviar =
+            document.getElementById(
+                "btnEnviar"
+            );
+
+
+        botonEnviar.disabled = true;
+
+
+        botonEnviar.textContent =
+            "⏳ Enviando pedido...";
+
+
+
+        /* =================================
+           SUPABASE
+        ================================= */
 
         try {
 
             /*
-               Verificar que exista
-               el cliente de Supabase.
+               Verificar que Supabase
+               esté conectado.
             */
 
             if (
-                typeof supabase !== "undefined" &&
-                supabase
+                !window.supabaseClient
             ) {
 
-                const { error } =
-                    await supabase
-                    .from("pedidos")
-                    .insert({
+                alert(
+                    "❌ Supabase no está conectado."
+                );
 
-                        mesa: mesa,
+                botonEnviar.disabled = false;
 
-                        pedido: pedido,
+                botonEnviar.textContent =
+                    "✅ Enviar pedido";
 
-                        total: total,
-
-                        estado: "pendiente"
-
-                    });
-
-
-                if (error) {
-
-                    console.error(
-                        "Error Supabase:",
-                        error
-                    );
-
-                    alert(
-                        "No se pudo enviar el pedido al restaurante."
-                    );
-
-                    return;
-
-                }
+                return;
 
             }
+
+
+            /*
+               Enviar pedido a Supabase.
+
+               Se mantiene la estructura
+               de tu tabla pedidos:
+               
+               mesa
+               productos
+               total
+               estado
+            */
+
+            const resultado =
+                await window.supabaseClient
+                .from("pedidos")
+                .insert([{
+
+                    mesa: mesa,
+
+                    productos: pedido,
+
+                    total: total,
+
+                    estado: "Pendiente"
+
+                }]);
+
+
+            /*
+               Obtener posible error.
+            */
+
+            const error =
+                resultado.error;
+
+
+            /*
+               Si Supabase devuelve error.
+            */
+
+            if (error) {
+
+                console.error(
+                    "Error Supabase:",
+                    error
+                );
+
+
+                alert(
+                    "❌ No se pudo enviar el pedido al restaurante.\n\n" +
+                    error.message
+                );
+
+
+                botonEnviar.disabled = false;
+
+                botonEnviar.textContent =
+                    "✅ Enviar pedido";
+
+                return;
+
+            }
+
+
+            /*
+               Pedido enviado correctamente.
+            */
+
+            alert(
+                "✅ Pedido enviado correctamente.\n\n" +
+                "Mesa: " +
+                mesa
+            );
+
+
+            /*
+               Vaciar solamente
+               el pedido de ESTA mesa.
+            */
+
+            localStorage.removeItem(
+                clavePedido
+            );
+
+
+            /*
+               Actualizar pantalla.
+            */
+
+            mostrarPedido();
 
         }
 
         catch (error) {
 
             console.error(
-                "Error:",
+                "Error inesperado:",
                 error
             );
 
+
             alert(
-                "Ocurrió un error al enviar el pedido."
+                "❌ Ocurrió un error al enviar el pedido.\n\n" +
+                error.message
             );
 
-            return;
+
+            botonEnviar.disabled = false;
+
+            botonEnviar.textContent =
+                "✅ Enviar pedido";
 
         }
-
-
-        /*
-           Pedido enviado correctamente.
-        */
-
-        alert(
-            "✅ Pedido enviado correctamente.\n\n" +
-            "Mesa: " +
-            mesa
-        );
-
-
-        /*
-           Vaciar solamente
-           el pedido de ESTA mesa.
-        */
-
-        localStorage.removeItem(
-            clavePedido
-        );
-
-
-        /*
-           Actualizar pantalla.
-        */
-
-        mostrarPedido();
 
     }
 
@@ -872,7 +1011,6 @@
     mostrarPedido();
 
 </script>
-
 
 </body>
 
