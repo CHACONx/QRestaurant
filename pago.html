@@ -467,41 +467,47 @@
        OBTENER MESA
     ===================================== */
 
-    const parametros =
-        new URLSearchParams(
-            window.location.search
-        );
+window.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-
-    let mesa =
-        parametros.get("mesa");
-
-
-    /*
-       Si no viene en la URL,
-       buscar en sessionStorage.
-    */
-
-    if (!mesa) {
-
-        mesa =
-            sessionStorage.getItem(
-                "clienteMesa"
+        const parametros =
+            new URLSearchParams(
+                window.location.search
             );
 
+        let mesa =
+            parametros.get("mesa");
+
+        if (!mesa) {
+
+            mesa =
+                sessionStorage.getItem(
+                    "clienteMesa"
+                );
+
+        }
+
+        if (!mesa) {
+
+            mesa = "1";
+
+        }
+
+        sessionStorage.setItem(
+            "clienteMesa",
+            mesa
+        );
+
+        document.getElementById(
+            "mesa"
+        ).textContent =
+            "Mesa: " + mesa;
+
+        window.mesaActual = mesa;
+
     }
-
-
-    /*
-       Si todavía no existe,
-       usar Mesa 1.
-    */
-
-    if (!mesa) {
-
-        mesa = "1";
-
-    }
+);
 
 
     /*
