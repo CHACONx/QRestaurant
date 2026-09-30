@@ -17,6 +17,30 @@
 
 <body>
 
+<script>
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const mesa =
+    parametros.get("mesa") ||
+    sessionStorage.getItem(
+        "clienteMesa"
+    ) ||
+    "1";
+
+document.getElementById(
+    "mesa"
+).textContent = mesa;
+
+sessionStorage.setItem(
+    "clienteMesa",
+    mesa
+);
+
+</script>
 
 <header class="encabezado">
 
@@ -30,7 +54,7 @@
 
     <p>
         Mesa:
-        <span id="mesa">1</span>
+        <span id="mesa"> </span>
     </p>
 
     </div>
